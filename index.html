@@ -1,0 +1,1182 @@
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Explorer</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src="d3.v3.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.4.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.3.1/mapbox-gl.css' rel='stylesheet' />
+    <link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet' />
+    <link href='style.css' rel='stylesheet'>
+</head>
+<body>
+
+
+<div id='map' class='fr'></div>
+<div class='direct-select'>
+  <div class='nubline'></div>
+  <div class='nub'></div>
+  <div class='dropdown'>
+    <div class='flipcard'>
+      <ul class='side fill-gray'></ul>
+        <div class='edit-view side' id='Background'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+          <h5 class=''>Base layer</h5>
+          <div class='inputarea color' type="paint" prop="background-color">
+            <div class='inputlabel'>Color</div>
+          </div>
+          <div class='inputarea wheelable' type="paint" prop="background-opacity">
+            <div class='inputlabel'>
+              Opacity
+              <a class='mode'></a>
+            </div>
+          </div>
+          <h5 >Hill shade</h5>
+          <div class='inputarea wheelable' type="paint" prop="raster-opacity">
+            <div class='inputlabel'>
+              Opacity
+              <a class='mode'></a>
+            </div>
+          </div>
+          <div class='inputarea' type="layout" prop="raster-blur">
+            <div class='inputlabel'>
+              Blur
+              <a class='mode'></a>
+            </div>
+          </div>
+        </div>
+        <div class='edit-view side' id='Water'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+          <h5 class=''>Fill</h5>
+          <div class='inputarea color' type="paint" prop="fill-color">
+            <div class='inputlabel'>Color</div>
+          </div>
+          <div class='inputarea wheelable' type="paint" prop="fill-opacity">
+            <div class='inputlabel'>
+              Opacity
+              <a class='mode'></a>
+            </div>
+          </div>
+          <h5 class=''>Coastline</h5>
+          <div class='inputarea color' type="paint" prop="line-color">
+            <div class='inputlabel'>Color</div>
+          </div>
+          <div class='inputarea wheelable' type="paint" prop="line-opacity">
+            <div class='inputlabel'>
+              Opacity
+                <a class='mode'></a>
+            </div>
+          </div>
+          <div class='inputarea wheelable' type="paint" prop="line-width" after='px'>
+            <div class='inputlabel'>Width
+              <a class='mode'></a>
+            </div>
+          </div>
+        </div>
+        <div class='edit-view side' id='Terrain'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+          <h5 class=''>Fill</h5>
+          <div class='inputarea color' type="paint" prop="fill-color">
+            <div class='inputlabel'>Color</div>
+          </div>
+          <div class='inputarea wheelable' type="paint" prop="fill-opacity">
+            <div class='inputlabel'>
+              Opacity
+              <a class='mode'></a>
+            </div>
+          </div>
+        </div>
+
+        <div class='edit-view side' id='Lines'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+            <div class='inputarea color' type="paint" prop="line-color">
+              <div class='inputlabel'>Color</div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-width" after='px'>
+              <div class='inputlabel'>
+                Width
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-opacity">
+              <div class='inputlabel'>Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-blur">
+              <div class='inputlabel'>
+                Blur
+                <a class='mode'></a>
+              </div>
+            </div>
+        </div>
+        <div class='edit-view side' id='Roads'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+          <h5 class=''>Road</h5>
+            <div class='inputarea color' type="paint" prop="line-color">
+              <div class='inputlabel'>Color</div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-width" after='px'>
+              <div class='inputlabel'>
+                Width
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-opacity">
+              <div class='inputlabel'>Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+          <h5 class=''>Casing</h5>
+            <div class='inputarea color' type="paint" prop="line-color">
+              <div class= 'inputlabel'>Color</div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-width" after='px'>
+              <div class='inputlabel'>
+                Width
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-opacity">
+              <div class='inputlabel'>Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-blur" after='px'>
+              <div class='inputlabel'>
+                Blur
+                <a class='mode'></a>
+              </div>
+            </div>
+        </div>
+        <div class='edit-view side' id='Buildings'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+          <h5 class=''>Roof</h5>
+            <div class='inputarea color' type="paint" prop="fill-color">
+              <div class='inputlabel'>Color</div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="fill-opacity">
+              <div class='inputlabel'>Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+          <h5 class=''>Roof Edge</h5>
+            <div class=' inputarea color' type="paint" prop="line-color">
+              <div class='inputlabel'>
+                Color
+              </div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-opacity">
+              <div class='inputlabel'>
+                Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-width" after='px'>
+              <div class='inputlabel'>
+                Width
+                <a class='mode'></a>
+              </div>
+            </div>
+
+          <h5 class=''>Footprint</h5>
+            <div class='inputarea color' type="paint" prop="fill-color">
+              <div class='inputlabel'>Color</div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="fill-opacity">
+              <div class='inputlabel'>Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+        </div>
+
+        <div class='edit-view side' id='Labels'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+
+          <div id='styling' class='section active'>
+              <h5 class=''>Text</h5>
+              <div class='inputarea color' type="paint" prop="text-color">
+                <div class='inputlabel'>Color</div>
+              </div>
+              <div class='inputarea wheelable' type="paint" prop="text-size">
+                <div class='inputlabel'>
+                  Size
+                  <a class='mode'></a>
+                </div>
+              </div>
+              <div class='inputarea wheelable' type="paint" prop="text-opacity">
+                <div class='inputlabel'>
+                  Opacity
+                  <a class='mode'></a>
+                </div>
+              </div>
+              <h5 class=''>Halo</h5>
+              <div class='inputarea color' type="paint" prop="text-halo-color">
+                <div class='inputlabel'>Color</div>
+              </div>
+              <div class='inputarea wheelable' type="paint" prop="text-halo-width" after='px'>
+                <div class='inputlabel'>
+                  Width
+                    <a class='mode'></a>
+                </div>
+              </div>
+              <div class='inputarea wheelable' type="paint" prop="text-halo-blur" after='px'>
+                <div class='inputlabel'>Blur
+                  <a class='mode'></a>
+                </div>
+              </div>
+          </div>
+          <div id='format' class='section clearfix' maxheight='270'>
+            <h5 class=''>Text</h5>
+            <div class='inputarea font' type="layout" prop="text-font">
+              <div class='inputlabel'>Font</div>
+            </div>
+            <div class='inputarea capping' type="layout" prop="text-transform">
+                <div class='inputlabel'>Capitalization</div>
+            </div>
+            <div class='inputarea' type="layout" prop="text-max-width" after='px'>
+                <div class='inputlabel'>Max line width</div>
+            </div>
+
+            <h5 class=''>Spacing</h5>
+            <div class='inputarea' type="layout" prop="text-padding" after='px'>
+                <div class='inputlabel'>Label padding</div>
+            </div>
+            <div class='inputarea col6' type="layout" prop="text-line-height" after='em' style='border-right:1px solid #ddd'>
+                <div class='inputlabel'>Line height</div>
+            </div>
+            <div class='inputarea col6' type="layout" prop="text-letter-spacing" after='px'>
+                <div class='inputlabel'>Kerning</div>
+            </div>
+          </div>
+
+          <div class='tabsection fill-gray'>
+            <div class='rounded-toggle bold'>
+              <input id='pizza' type='radio' name='rtoggle' value='pizza' checked='checked' onclick="$('.active').toggleClass('active'); $('#styling').addClass('active')">
+              <label for='pizza'>STYLE</label>
+              <input href='#format' id='penny' type='radio' name='rtoggle' value='penny' onclick="$('.active').toggleClass('active'); $('#format').addClass('active')">
+              <label for='penny'>TEXT FORMAT</label>
+            </div>
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+//for(var i=0;i<stylesheet.layers.length;i++){console.log(i+': '+stylesheet.layers[i]['id'])}
+
+  var current={'group':'Terrain','zoom': 2, 'quickPick': false, 'stashedStyle':{}, capitalization:[['none','Default'], ['uppercase','UPPERCASE'],['lowercase','lowercase']]};
+
+
+  function closeDropdown() {
+    $('.direct-select').removeClass('visible');
+    $('.dropdown').removeClass('expand');
+  };
+
+  function formatText(input){return input.charAt(0).toUpperCase()+ input.slice(1).replace(/_/g, ' ')};
+
+d3.selectAll('ul')
+  .on('mousewheel',function(e){
+    if($('input:hover').length==0 && $('.inputarea:hover').length==0){
+    map.zoomTo(map.getZoom()+event.wheelDeltaY*0.01,{offset:differential, animate:false }
+    )};
+});
+
+//Load layer scheme
+mapboxgl.util.getJSON('layers.json', function (err, layers) {
+  if (err) throw err;
+  window.layerRef= layers;
+  window.fonts=[];
+  for (var family in layers.Fonts) {
+    fonts = fonts.concat(layers.Fonts[family]);
+  }
+});
+
+
+
+//Load styles
+mapboxgl.util.getJSON('style2.json', function (err, style) {
+  if (err) throw err;
+
+  window.stylesheet=style;
+
+  style.layers.forEach(function(layer) {layer.interactive = true});
+
+
+
+  //Draw map
+  mapboxgl.accessToken = 'pk.eyJ1IjoicGV0ZXJxbGl1IiwiYSI6ImpvZmV0UEEifQ._D4bRmVcGfJvo1wjuOpA1g';
+  window.map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: style, //stylesheet location
+    zoom: 2, // starting zoom,
+    hash: true,
+    maxZoom:20
+  });
+
+d3.select('#map')
+  .on("mousemove", function(event) {
+    if (d3.event.shiftKey) {
+      var coord=[0,0];
+      coord=d3.mouse(this);
+      map.featuresAt({'x':coord[0],'y':coord[1]}, {"radius":1}, function(err, output) {
+        if (err) throw err;
+
+        output = output
+          .map(function(n){return n['_bucket']})
+          .filter(function(n) {return n.indexOf('_case') == -1})
+          .filter(function(n) {return n.indexOf('_stroke') == -1});
+          //console.log('FeaturesAt output: '+output);
+
+        if (output.length>0) {
+            current.active=output[0];
+            activateLayer(output[0]);
+        };
+        if (current.active == output[0]){}
+        else
+          { deactivateLayer(current.active);
+            console.log(current.active+' is now restored')
+            activateLayer(output[0]);
+            current.active = output[0];
+          }
+
+        //console.log(output[0]);
+      });
+    }
+  });
+  //d3.select(window).on('keyup',function(){deactivateLayer(current.active)});
+
+
+
+  $('bod')
+    .on('keydown', function(e){if (e.shiftKey == 1)
+      {current.quickPick = true;
+        map.on('hover', function(e){
+          map.featuresAt(e.point, {"radius":1}, function(err, output) {
+            if (err) throw err;
+
+            //take only the id, filter out the border layers and repeats
+            output = output
+              .map(function(n){return n['_bucket']})
+              .filter(function(n) {return n.indexOf('_stroke') == -1});
+
+            if (output.length>0 && current.active == output[0]){console.log('still same')}
+            else
+              {//console.log(current.active);
+              activateLayer(output[0]);
+              deactivateLayer(current.active);
+              current.active = output[0];
+              }
+          }
+          );
+
+        })
+      }})
+    .on('keyup', function(e){if (e.shiftKey == 0)
+      {current.quickPick = false;
+        map.off('hover');
+        deactivateLayer(current.active);
+        current.active=null;
+      }});
+
+  //Direct select
+  map
+    .on('click', function(e) {
+      var center = map.project(map.getCenter());
+      window.differential=[e.point.x-center.x, e.point.y-center.y];
+
+      if(!event.shiftKey){
+        toggleBubble(e);
+        //toggle bubble visibility, whenever map is clicked
+        $('.direct-select')
+          .css('-webkit-transform', 'translateX('+e.point.x+'px) translateY('+e.point.y+'px)')
+          .toggleClass('visible');
+        $('.editing').removeClass('editing')
+      }
+    })
+    .on('zoom', function() {
+      $('.slider .zoomneedle').css('left', (map.getZoom()*5-2.5)+'%');
+      current.zoom = Math.round(map.transform.zoom);}
+    );
+
+
+
+
+
+  //getValues();
+
+  // fetch new values if either zoom or active group changes
+  Object.observe(current,
+    function(){
+      console.log('observed a change in current');
+
+    }
+  );
+
+
+
+  });
+
+
+
+// Mousewheel incrementing
+
+var EventUtil = {
+
+  addHandler: function(element, type, handler){
+        if (element.addEventListener){
+            element.addEventListener(type, handler, false);
+        } else if (element.attachEvent){
+            element.attachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = handler;
+        }
+    },
+
+  removeHandler: function(element, type, handler){
+        if (element.removeEventListener){
+            element.removeEventListener(type, handler, false);
+        } else if (element.detachEvent){
+            element.detachEvent("on" + type, handler);
+        } else {
+            element["on" + type] = null;
+        }
+    },
+
+  getEvent: function(event) {
+        return event ? event : window.event;
+    },
+
+  getTarget: function(event) {
+    return event.target || event.srcElement;
+  },
+
+  getWheelDelta: function(event) {
+        if (event.wheelDelta){
+          //console.log(event.wheelDelta)
+            return event.wheelDelta;
+        } else {
+            return -event.detail * 40;
+        }
+    },
+
+  preventDefault: function(event) {
+        if (event.preventDefault){
+            event.preventDefault();
+        } else {
+            event.returnValue = false;
+        }
+    }
+};
+
+function onWheel(event) {
+  event = EventUtil.getEvent(event);
+  var curElem=d3.select('.wheelable:hover');
+  var input = curElem.select('.input')[0][0];
+  var zoom = parseInt(curElem.attr('zoom'));
+  var curVal = parseFloat(input.innerHTML);
+  var delta = EventUtil.getWheelDelta(event);
+  var min=0;
+  var max=99;
+  var increment;
+
+  if(curElem.attr('prop').indexOf('opacity')==-1)
+    {increment= 0.02} 
+  else {increment= 0.02; max=1};
+
+
+
+  var newVal=curVal-delta*(increment*0.05);
+  if (newVal<=max && newVal>=min) {
+    curVal=newVal;
+  }
+ input.innerHTML = parseFloat(curVal).toFixed(2);
+  var layer = $('.wheelable:hover').attr('layer');
+  var type = $('.wheelable:hover').attr('type');
+  var prop = $('.wheelable:hover').attr('prop');
+  var val = $('.wheelable:hover .input')[0].innerHTML;
+
+  if(zoom>=0){
+    val=[zoom, parseFloat(val)]};
+  setValue(layer, type, prop, val, null, {transition:!1});
+    EventUtil.preventDefault(event);
+}
+
+$(".dropdown")
+    .on('mouseenter', 'span.wheelable, div.wheelable', function(){
+      EventUtil.addHandler(document,'mousewheel',onWheel);
+      EventUtil.addHandler(document,'DOMMouseScroll',onWheel);
+    })
+    .on('mouseleave', 'span.wheelable, div.wheelable', function(){
+    EventUtil.removeHandler(document,'mousewheel',onWheel);
+    EventUtil.removeHandler(document,'DOMMouseScroll',onWheel);
+    });
+;
+
+
+
+
+
+//Get features at the mouse position, and then either 1) surfaces edit UI (if quickpick active, or only one feature present) or 2) serves up the list of features
+
+function toggleBubble(e) {
+  $('.inputarea input').remove();
+  $('.inputarea .slider').remove();
+
+  map.featuresAt(e.point, {"radius":10}, function(err, output) {
+        if (err) throw err;
+        var latlon=map.unproject(e.point);
+        //var center= map.project(map.getCenter());
+        $('.expand').removeClass('expand');
+
+        //take only the id, filter out the border layers and repeats
+        output = output
+          .map(function(n){return n['_bucket']})
+          .filter(function(n) {return n.indexOf('_case') == -1})
+          .filter(function(n) {return n.indexOf('_stroke') == -1})
+          .reverse();
+
+        var features = [];
+        if (output.length<10){
+          features.push('land')
+        };
+
+        //remove repeats
+        for (var i=0; i<output.length; i++){
+          if (features.indexOf(output[i])== -1) {features.push(output[i])}
+          if (map.getZoom()<15){}
+        };
+        $('.direct-select li').remove();
+
+        //if only one feature at location, go right to edit view
+        if (current.quickPick || features.length==1){showEditView(features[features.length-1],null, latlon)}
+
+        else (
+          d3.select('.direct-select')
+            .select('ul')
+            .selectAll('li')
+            .data(features.reverse())
+            .enter()
+            .insert('li')
+            .attr('class', 'keyline-bottom col12 clearfix')
+            .text(function(d,i){return formatText(features[i])})
+            .on('click', function(d,i) {deactivateLayer(features[i]);showEditView(d,i, latlon)})
+            .on('mouseover', function(d,i){
+              activateLayer(features[i]);
+            })
+            .on('mouseout', function(d,i) {
+              deactivateLayer(features[i]);
+            })
+        );
+
+        //track select bubble to the map
+        map.on('move', function(){
+          var pos=map.project(latlon);
+          $('.visible.direct-select')
+            .css('-webkit-transform', 'translateX('+pos.x+'px) translateY('+pos.y+'px)');
+
+          var center = map.project(map.getCenter());
+          window.differential=[pos.x-center.x, pos.y-center.y];
+        });
+      });
+}
+
+function activateLayer(layer){
+  console.log('layer is '+layer);
+  //stash existing style, to be restored on mouseout
+  var mapStyle = map.style.layermap[layer].paint;
+  current.stashedStyle = map.style.layermap[layer].paint;
+  window.existingText = mapStyle['text-color'];
+  window.existingFill = mapStyle['fill-color'];
+  window.existingLine = mapStyle['line-color'];
+  window.existingOpacity = mapStyle['fill-opacity'];
+
+  //apply hovered style
+  mapStyle['fill-outline-color'] = "red";
+  mapStyle['line-color'] = "#f18e6b";
+  mapStyle['text-color'] = "red";
+  mapStyle['fill-opacity'] = 0.7;
+  mapStyle['fill-image'] = 'select';
+  mapStyle['background-image'] = 'select';
+
+
+  map.style.cascade({transition:!1});
+};
+
+function deactivateLayer(layer){
+  //replace with original style that we stashed
+  var mapStyle = map.style.layermap[layer].paint;
+  delete(mapStyle['fill-outline-color']);
+  delete(mapStyle['fill-image']);
+  delete(mapStyle['line-image']);
+
+  delete(mapStyle['background-image']);
+  mapStyle['text-color'] = existingText;  
+  mapStyle['line-color'] = existingLine;
+  mapStyle['fill-opacity'] = existingOpacity;
+  map.style.cascade({transition:!1});
+};
+
+function showEditView(d, i, latlon) {
+  if ($('.visible').length>=1){
+    //when <li> is clicked, center map on the bubble, and flip the bubble
+    $('.direct-select li').trigger('mouseout');
+    $('.dropdown').toggleClass('expand');
+    map.panTo(latlon,{duration:600});
+
+    //Set title
+    $('.edit-view h2').text(formatText(d));
+
+    var selectedGroup= layerRef['Layers'][d];
+    var selectedCat=selectedGroup.Category;
+    var MappingScheme= layerRef['Categories'][selectedGroup['Category']]['MappingScheme'];
+
+    //Show proper edit UI based on category of the clicked layer
+    $('#'+selectedCat).toggleClass('editing');
+
+
+    //define layer of each inputarea
+    d3.selectAll('.editing .inputarea')
+      .attr('layer', function(d, i){return selectedGroup.LayerMapping[MappingScheme[i]]});
+
+    //Populate fields with prop values as they currently stand
+    getValues('group');
+  }
+}
+
+// Master value editor: updates and applies new style on every keystroke, and converts prop modes accordingly
+
+function setValue(layer, type, prop, value, convert, instant){
+  var layerId = stylesheet['layers'][layer]['id'];
+
+  var path = stylesheet['layers'][layer][type][prop];
+  var mapObject = map.style.layermap[layerId][type][prop];
+
+  function set(value){
+    stylesheet['layers'][layer][type][prop] = value;
+    map.style.layermap[layerId][type][prop] = value
+  };
+
+  switch (convert){
+
+          case 'global':
+            if(typeof path === 'object') {set(value)};
+            //console.log('we just changed a value to global. the new value is: '+JSON.stringify(path));
+            break;
+
+          case 'anchor':
+
+            if(typeof path === 'object') {
+              var index = path['stops'].map(function(e){return e[0]}).indexOf(value[0]);
+
+              //if currently trans, splice in a new array entry
+              if (index == -1) {
+                var futurePosition = path['stops'].filter(function(n){return n[0]<value[0]}).length;
+                var newAnchor = value;
+                path['stops'].splice(futurePosition, 0, newAnchor);
+                //console.log('we just added a new anchor. the new value is: '+JSON.stringify(path));
+              }
+            }
+            //if it's currently global, set up new array
+            else {
+                var newArray= {"stops": value};
+                set(newArray);
+            }
+
+            break;
+
+          case 'delete':
+
+            //if there's an existing array of length > 1, just pluck out this anchor point
+            console.log('this array is currently '+JSON.stringify(path['stops'])+'. The value passed in was '+value);
+            if (typeof path === 'object' && path['stops'].length > 1) {
+              var index = path['stops'].map(function(e){return e[0]}).indexOf(parseFloat(value[0]));
+              //console.log(index);
+              mapObject['stops'].splice(index, 1);
+              //console.log('we just removed an anchor. the new value is: '+JSON.stringify(path));
+            }
+
+            // the array has only one object, convert to global with the last anchor's value
+            else
+              if (path['stops'].length == 1) {
+                set(value[1]);
+                getValues();
+                //console.log('we just removed the last anchor, converting it to a global value of: '+JSON.stringify(path))
+              };
+            console.log('after removal, the stops are '+JSON.stringify(path))
+            break;
+
+          //moving an anchor to a new zoom level
+          case 'move':
+            if(value[0] != value[1]){
+              var index = path['stops'].map(function(e){return e[0]}).indexOf(value[0]);
+              var stopvalue = mapObject.stops[index][1];
+              //console.log('the stop we are changing has a value of '+stopvalue);
+
+              //remove old array
+              mapObject.stops.splice(index, 1);
+              //console.log('after removal, the array looks like: '+JSON.stringify(path.stops));
+
+              //splice in new array
+              var futurePosition = path['stops'].filter(function(n){return n[0]<value[1]}).length;
+              mapObject.stops.splice(futurePosition, 0, [value[1], stopvalue]);
+              //console.log('with the new object inserted, the array looks like: '+JSON.stringify(mapObject.stops))
+            }
+            break;
+
+          case null:
+
+            //Edit existing anchor
+            if(typeof path === 'object') {
+              //console.log(path);
+              //console.log(value);
+                var index = path.stops.map(function(e){return e[0]}).indexOf(value[0]);
+                path.stops[index][1] = value[1];
+                console.log('we just changed an anchor value. Overall, the new value is: '+JSON.stringify(path));
+            }
+            else {
+              set(value);
+            //console.log('we just changed a global value. the new value is: '+JSON.stringify(path));
+
+            };
+            break;
+        }
+    map.style.cascade(instant);
+    if (type=='layout'){map.setStyle(stylesheet)}
+};
+
+
+
+
+
+
+
+
+function getValues(group) {
+  if(group){
+    $('.editing .inputarea').each(function(){
+        var layer = $(this).attr('layer');
+        var type = $(this).attr('type');
+        var prop = $(this).attr('prop');
+        var value = stylesheet.layers[layer][type][prop];
+        var inputarea = d3.select(this);
+
+        inputarea.selectAll('.slider, .input, .colorsample, .colordrawer, select').remove();
+        d3.selectAll('h2')
+            .on('mousewheel',function(e){
+              if($('input:hover').length==0 && $('.inputarea:hover').length==0){
+                event.preventDefault();
+                map.zoomTo(map.getZoom()+event.wheelDeltaY*0.01,{offset:differential, animate:false }
+              )};
+            });
+
+        //if it's a global value, append an input field and populate it with the value
+        if (typeof value === 'string' || typeof value === 'number'|| typeof value === 'null') {
+
+
+          if (inputarea.classed('font')) {
+              inputarea
+                .selectAll('select')
+                .data([1])
+                .enter()
+                .append('select')
+                .on('change', function(){
+                  var newFont = d3.select(this).property('value');
+                  setValue(layer, type, prop, newFont, null);
+                })
+                .selectAll('option')
+                .data(fonts)
+                .enter()
+                .append('option')
+                .attr('value',function(d,i){return fonts[i]})
+                .attr('selected', function(d,i){
+                  if (fonts[i]==value){return true}})
+                .text(function(d,i){return fonts[i]});
+          }
+
+          else if (inputarea.classed('capping')) {
+              inputarea
+                .selectAll('select')
+                .data([1])
+                .enter()
+                .append('select')
+                .on('change', function(){
+                  var newFont = d3.select(this).property('value');
+                  setValue(layer, type, prop, newFont, null);
+                })
+                .selectAll('option')
+                .data(current.capitalization)
+                .enter()
+                .append('option')
+                .attr('value',function(d,i){return current.capitalization[i][0]})
+                .attr('selected', function(d,i){
+                  if (fonts[i]==value){return true}})
+                .text(function(d,i){return current.capitalization[i][1]});
+          }
+            else {
+              inputarea
+                .attr('mode','global')
+                .selectAll('.input')
+                .data([1])
+                .enter()
+                .append('div')
+                .attr('class', 'text-right input')
+                .attr('contenteditable','true')
+                .text(value)
+                .on('keyup', function(){
+                  var newVal = $(this)[0].innerHTML;
+                  setValue(layer, type, prop, newVal, null);
+                });
+
+              // mode switcher to transitional
+              inputarea
+                .select('.mode')
+                .classed('global', false)
+                .classed('anchor', true)
+                .on('click', function() {
+                  setValue(layer, type, prop, [ [current.zoom, stylesheet.layers[layer][type][prop]] ], 'anchor', null);
+                  getValues('group');
+                  $(this).trigger('mouseout').trigger('mouseover');
+                });
+              //specific to the color UI: nonwheelable, and append the color picker (inspired by http://codepen.io/Zaku/details/fyLKw)
+              if(inputarea.classed('color')) {
+
+              //add color circle
+              inputarea
+                .insert('div','.input')
+                .attr('class','colorsample tooltip fr')
+                .attr('style', 'background-color:'+value)
+                .attr('onclick','$(this).toggleClass("open")');
+
+              inputarea.select('.input')
+                .on('keyup', function(){
+                  var newVal= $(this)[0].innerHTML;
+                  inputarea.select('.colorsample')[0][0].style.background=newVal;
+                  setValue(layer, type, prop, newVal, null);
+                  value=newVal;
+                });
+
+              //add colorpicker
+              inputarea
+                .append('div')
+                .attr('class','colordrawer')
+                .append('div')
+                .attr('class', 'downarrow');
+              inputarea
+                .select('.colordrawer')
+                .append('div')
+                .attr('class', 'rainbow');
+              inputarea
+                .select('.colordrawer')
+                .append('div')
+                .attr('class','lightness')
+                .text(" ←  Lightness  →");
+              inputarea
+                .select('.colordrawer')
+                .append('div')
+                .attr('class','alpha');
+
+              inputarea
+                .select('.colordrawer')
+                .append('div')
+                .attr('class','colorbox')
+                .attr("style", "background-color: " + value)
+                .on('mousemove', function(e) {
+                  var maxX, maxY, x, y;
+                  maxX = 280;
+                  maxY = 210;
+                  x = event.offsetX;
+                  y = event.offsetY;
+                  h = ~~(x / maxX * 360);
+                  l = ~~( y / maxY * 10000) / 100;
+                  draw();
+                  inputarea.select('.xline')
+                  .attr('style','-webkit-transform:translateX('+x+'px)');
+                  inputarea.select('.yline')
+                  .attr('style','-webkit-transform:translateY('+y+'px)');
+                  $('.downarrow')
+                    .css('-webkit-transform','translateX('+x+'px)');
+                })
+                .on("mousewheel", function(e) {
+                    event.preventDefault();
+                    var delta;
+                    if (event.wheelDelta) {
+                      delta = event.wheelDelta / 120;
+                    }
+
+                    if (event.details) {
+                      delta = -event.details;
+                    }
+
+                    s = Math.max(0, Math.min(100, s + delta * 5));
+                    draw();
+                })
+                .on('click', function(){
+                  inputarea
+                    .select('.colorsample')
+                    .classed('open', false);
+                  value=stylesheet.layers[layer][type][prop];
+                })
+                .on('mouseleave', function(){
+                    colorbox.attr("style", "background-color: " + value);
+                    inputarea.select('.colorsample').attr("style", "background-color: " + value);
+                    inputarea.select('.input')
+                      .text(value);
+                    setValue(layer, type, prop, value, null, {transition:!1});
+                });
+
+                d3.select('.colorbox')
+                  .selectAll('div')
+                  .data(['xline','yline'])
+                  .enter()
+                  .append('div')
+                  .attr('class', function(d){return d});
+
+                d3.select('.colorbox')
+                  .selectAll('.colorcircle')
+                  .data([1])
+                  .enter()
+                  .append('div')
+                  .attr('class', 'colorcircle');
+
+                var draw, h, l, s, colorbox;
+
+                h = ~~(Math.random() * 360);
+                s = 50;
+                l = 50;
+                colorbox = inputarea.select('.colorbox');
+
+                draw = function() {
+                  var hsl, rgb;
+                  hsl = new d3.hsl(h, s / 100.0, l / 100.0);
+                  rgb = new d3.rgb(hsl);
+
+                  colorbox.attr("style", "background-color: " + hsl.toString());
+                  $('.colorcircle').css('background-color',hsl.toString());
+                  inputarea.select('.colorsample').attr("style", "background-color: " + hsl.toString());
+                  inputarea.select('.input')
+                    .text(hsl.toString());
+                  setValue(layer, type, prop, hsl.toString(), null, {transition:!1});
+                };
+            }
+              else {inputarea.classed('wheelable', true)}
+            }
+        }
+
+        //if it's a ranged thing, we gotta build a fucking slider
+        if (typeof value === 'object') {
+
+
+          var slider =  inputarea.classed('wheelable',false)
+                        .append('div')
+                        .attr('class', 'slider');
+          inputarea
+            .select('.mode')
+            .classed('global', true)
+            .classed('anchor', false)
+            .on('click', function(){
+              setValue(layer, type, prop, 1, 'global', null);
+              getValues('group');
+              $(this).trigger('mouseout').trigger('mouseover');
+            });
+
+          //set up the basic slider and needle
+          slider
+            .append('div')
+            .attr('class','zoomneedle')
+            .attr('style', 'left:'+(map.getZoom()*5-2.5)+'%')
+            ;
+
+          var gridlines=[1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1];
+
+          //make the hover area, svg, and path
+            slider
+            .append('div')
+            .attr('class','slidersegment')
+            .on('mousewheel',function(e){
+              event.preventDefault();
+              map.zoomTo(map.getZoom()+event.wheelDeltaY*0.01,{offset:differential, animate:false });
+            })
+            .on('click', function() {
+              var roundedzoom = Math.round(20*event.offsetX/210);
+              setValue(layer, type, prop, [roundedzoom, 1], 'anchor', null);
+              updateSliderStop(slider, value.stops, layer, type, prop);
+            })
+            .append('svg')
+            .selectAll('line')
+            .data(gridlines)
+            .enter()
+            .append('line')
+            .attr('class',function(d,i){
+              if(i%5==0){return 'fifth'}
+            })
+            .attr('x1', function(d,i){return 10*i+5})
+            .attr('x2', function(d,i){return 10*i+5})
+            .attr('y1',0)
+            .attr('y2',50);
+
+            slider.select('svg')
+            .append('path');
+
+
+          //add stops for the first time
+          updateSliderStop(slider, value.stops, layer, type, prop);
+
+
+
+        }
+    })
+  }
+};
+
+function updateSliderStop(slider, data, layer, type, prop){
+    var stops=slider
+      .selectAll('.stop')
+      .data(data, function(d) {return d});
+
+    stops
+      .enter()
+      .append('div')
+      .attr('class', 'stop wheelable')
+      .attr('layer', layer)
+      .attr('type', type)
+      .attr('prop', prop)
+      .attr('zoom',function(d){return d[0]})
+      .on('mousedown', function(){
+        d3.event.preventDefault(); // disable text dragging
+
+        var startx=d3.event.clientX;
+        var stop=$(this);
+        var startoffset=Math.round(stop[0]['offsetLeft']); 
+
+        var w = d3.select(window)
+            .on("mousemove", mousemove)
+            .on("mouseup", mouseup);
+
+        function mousemove() {
+          var currentx = startoffset+d3.event.clientX-startx;
+
+          if (currentx >= 0 && currentx <= 200 && data.map(function(e){return e[0]}).indexOf(Math.round(currentx/10))==-1)
+          {
+            updateSliderStop(slider, data, layer, type, prop);
+            stop
+              .attr('style', function() {return 'left:' + currentx +'px'})
+              .attr('zoom', Math.round(currentx*0.1));
+          }
+        }
+
+        function mouseup() {
+          w.on("mousemove", null).on("mouseup", null);
+
+          var rounded = Math.round((startoffset+d3.event.clientX-startx)/10)*10;
+          console.log(data.map(function(e){return e[0]}).indexOf(Math.round(rounded/10)));
+
+          if (rounded >= 0 && rounded <= 200 && data.map(function(e){return e[0]}).indexOf(Math.round(rounded/10))==-1) {
+
+            setValue(layer, type, prop, [Math.round(startoffset*0.1), Math.round(rounded*0.1)], 'move', null);
+            updateSliderStop(slider, data, layer, type, prop);
+          };
+        }
+      })
+      .on('mousewheel',function(){
+        event.preventDefault();
+        updateSliderStop(slider, data, layer, type, prop)})
+      .attr('style',function(d,i) {return 'left:'+d[0]*10+'px'})
+        .append('div')
+        .attr('class','stopbubble')
+        .append('div')
+        .attr('class','input')
+        .attr('contenteditable','true')
+        .text(function(d,i){return d[1]});
+
+  stops.selectAll('.dot')
+    .data([1])
+    .enter()
+    .insert('span', '.stopbubble')
+    .attr('class','dot')
+    .text('⋅');
+
+  stops.select('.stop .stopbubble')
+    .selectAll('span')
+    .data([1])
+    .enter()
+    .insert('span', '.input')
+    .on('click', function(d){
+      var zoom = $(this).parent().parent().attr('zoom');
+
+      setValue(layer, type, prop, [zoom, 1], 'delete', null);
+      updateSliderStop(slider, data, layer, type, prop)
+    })
+    .text('✕ ');
+
+  stops.exit().remove();
+
+
+//draw the curve
+
+  var w=210;
+  var h=48;
+
+  var input = data;
+  var ymax = d3.max(input.map(function(n){return n[1]}));
+
+  var output=input.map(function(n){return {"x":n[0], "y":n[1]}});
+
+  if (output[0]['x']!=0){output.unshift({'x':0, 'y': output[0]['y']})};
+  if (output.slice(-1)[0]!=20){output.push({'x': 20, 'y': output.slice(-1)[0]['y']})};
+  var scalex = d3.scale
+    .linear()
+    .domain([0, 20])
+    .range([0, w]);
+
+            var scaley =
+              d3.scale
+              .linear()
+              .domain([0, ymax])
+              .range([0.5, 0.4*h*0.5]);
+
+            var area = d3.svg.area()
+                .x(function(d) { return scalex(d.x) })
+                .y0(function(d) { return -scaley(d.y)+0.5*h })
+                .y1(function(d) { return scaley(d.y)+0.5*h })
+                .interpolate("basis");
+
+            slider.select('.slidersegment').select('path')
+            .attr('d',area(output));
+
+}
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
