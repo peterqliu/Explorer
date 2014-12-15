@@ -1,0 +1,293 @@
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Explorer</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src="d3.v3.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.4.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.3.1/mapbox-gl.css' rel='stylesheet' />
+    <link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet' />
+    <link href='style.css' rel='stylesheet'>
+</head>
+<body>
+
+
+<div id='map' class='fr'></div>
+<div class='direct-select'>
+  <div class='nubline'></div>
+  <div class='nub'></div>
+  <div class='dropdown'>
+    <div class='flipcard'>
+      <ul class='side fill-gray'></ul>
+        <div class='edit-view side' id='Background'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+          <h5 class=''>Base layer</h5>
+          <div class='inputarea color' type="paint" prop="background-color">
+            <div class='inputlabel'>Color</div>
+          </div>
+          <div class='inputarea wheelable' type="paint" prop="background-opacity">
+            <div class='inputlabel'>
+              Opacity
+              <a class='mode'></a>
+            </div>
+          </div>
+          <h5 >Hill shade</h5>
+          <div class='inputarea wheelable' type="paint" prop="raster-opacity">
+            <div class='inputlabel'>
+              Opacity
+              <a class='mode'></a>
+            </div>
+          </div>
+          <div class='inputarea' type="layout" prop="raster-blur">
+            <div class='inputlabel'>
+              Blur
+              <a class='mode'></a>
+            </div>
+          </div>
+        </div>
+        <div class='edit-view side' id='Water'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+          <h5 class=''>Fill</h5>
+          <div class='inputarea color' type="paint" prop="fill-color">
+            <div class='inputlabel'>Color</div>
+          </div>
+          <div class='inputarea wheelable' type="paint" prop="fill-opacity">
+            <div class='inputlabel'>
+              Opacity
+              <a class='mode'></a>
+            </div>
+          </div>
+          <h5 class=''>Coastline</h5>
+          <div class='inputarea color' type="paint" prop="line-color">
+            <div class='inputlabel'>Color</div>
+          </div>
+          <div class='inputarea wheelable' type="paint" prop="line-opacity">
+            <div class='inputlabel'>
+              Opacity
+                <a class='mode'></a>
+            </div>
+          </div>
+          <div class='inputarea wheelable' type="paint" prop="line-width" after='px'>
+            <div class='inputlabel'>Width
+              <a class='mode'></a>
+            </div>
+          </div>
+        </div>
+        <div class='edit-view side' id='Terrain'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+          <h5 class=''>Fill</h5>
+          <div class='inputarea color' type="paint" prop="fill-color">
+            <div class='inputlabel'>Color</div>
+          </div>
+          <div class='inputarea wheelable' type="paint" prop="fill-opacity">
+            <div class='inputlabel'>
+              Opacity
+              <a class='mode'></a>
+            </div>
+          </div>
+        </div>
+
+        <div class='edit-view side' id='Lines'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+            <div class='inputarea color' type="paint" prop="line-color">
+              <div class='inputlabel'>Color</div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-width" after='px'>
+              <div class='inputlabel'>
+                Width
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-opacity">
+              <div class='inputlabel'>Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-blur">
+              <div class='inputlabel'>
+                Blur
+                <a class='mode'></a>
+              </div>
+            </div>
+        </div>
+        <div class='edit-view side' id='Roads'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+          <h5 class=''>Road</h5>
+            <div class='inputarea color' type="paint" prop="line-color">
+              <div class='inputlabel'>Color</div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-width" after='px'>
+              <div class='inputlabel'>
+                Width
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-opacity">
+              <div class='inputlabel'>Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+          <h5 class=''>Casing</h5>
+            <div class='inputarea color' type="paint" prop="line-color">
+              <div class= 'inputlabel'>Color</div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-width" after='px'>
+              <div class='inputlabel'>
+                Width
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-opacity">
+              <div class='inputlabel'>Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-blur" after='px'>
+              <div class='inputlabel'>
+                Blur
+                <a class='mode'></a>
+              </div>
+            </div>
+        </div>
+        <div class='edit-view side' id='Buildings'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+          <h5 class=''>Roof</h5>
+            <div class='inputarea color' type="paint" prop="fill-color">
+              <div class='inputlabel'>Color</div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="fill-opacity">
+              <div class='inputlabel'>Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+          <h5 class=''>Roof Edge</h5>
+            <div class=' inputarea color' type="paint" prop="line-color">
+              <div class='inputlabel'>
+                Color
+              </div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-opacity">
+              <div class='inputlabel'>
+                Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="line-width" after='px'>
+              <div class='inputlabel'>
+                Width
+                <a class='mode'></a>
+              </div>
+            </div>
+
+          <h5 class=''>Footprint</h5>
+            <div class='inputarea color' type="paint" prop="fill-color">
+              <div class='inputlabel'>Color</div>
+
+
+            </div>
+            <div class=' inputarea wheelable' type="paint" prop="fill-opacity">
+              <div class='inputlabel'>Opacity
+                <a class='mode'></a>
+              </div>
+            </div>
+        </div>
+
+        <div class='edit-view side' id='Labels'>
+          <a class='fr close bold' onclick='closeDropdown()'>✕</a>
+          <h2></h2>
+
+          <div id='styling' class='section active'>
+              <h5 class=''>Text</h5>
+              <div class='inputarea color' type="paint" prop="text-color">
+                <div class='inputlabel'>Color</div>
+              </div>
+              <div class='inputarea wheelable' type="paint" prop="text-size">
+                <div class='inputlabel'>
+                  Size
+                  <a class='mode'></a>
+                </div>
+              </div>
+              <div class='inputarea wheelable' type="paint" prop="text-opacity">
+                <div class='inputlabel'>
+                  Opacity
+                  <a class='mode'></a>
+                </div>
+              </div>
+              <h5 class=''>Halo</h5>
+              <div class='inputarea color' type="paint" prop="text-halo-color">
+                <div class='inputlabel'>Color</div>
+              </div>
+              <div class='inputarea wheelable' type="paint" prop="text-halo-width" after='px'>
+                <div class='inputlabel'>
+                  Width
+                    <a class='mode'></a>
+                </div>
+              </div>
+              <div class='inputarea wheelable' type="paint" prop="text-halo-blur" after='px'>
+                <div class='inputlabel'>Blur
+                  <a class='mode'></a>
+                </div>
+              </div>
+          </div>
+          <div id='format' class='section clearfix' maxheight='270'>
+            <h5 class=''>Text</h5>
+            <div class='inputarea font' type="layout" prop="text-font">
+              <div class='inputlabel'>Font</div>
+            </div>
+            <div class='inputarea capping' type="layout" prop="text-transform">
+                <div class='inputlabel'>Capitalization</div>
+            </div>
+            <div class='inputarea' type="layout" prop="text-max-width" after='px'>
+                <div class='inputlabel'>Max line width</div>
+            </div>
+
+            <h5 class=''>Spacing</h5>
+            <div class='inputarea' type="layout" prop="text-padding" after='px'>
+                <div class='inputlabel'>Label padding</div>
+            </div>
+            <div class='inputarea col6' type="layout" prop="text-line-height" after='em' style='border-right:1px solid #ddd'>
+                <div class='inputlabel'>Line height</div>
+            </div>
+            <div class='inputarea col6' type="layout" prop="text-letter-spacing" after='px'>
+                <div class='inputlabel'>Kerning</div>
+            </div>
+          </div>
+
+          <div class='tabsection fill-gray'>
+            <div class='rounded-toggle bold'>
+              <input id='pizza' type='radio' name='rtoggle' value='pizza' checked='checked' onclick="$('.active').toggleClass('active'); $('#styling').addClass('active')">
+              <label for='pizza'>STYLE</label>
+              <input href='#format' id='penny' type='radio' name='rtoggle' value='penny' onclick="$('.active').toggleClass('active'); $('#format').addClass('active')">
+              <label for='penny'>TEXT FORMAT</label>
+            </div>
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script src="explorer.js"></script>
+
+</body>
+</html>

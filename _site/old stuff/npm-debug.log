@@ -1,0 +1,202 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'mapbox-gl-style-lint' ]
+2 info using npm@1.4.23
+3 info using node@v0.10.31
+4 verbose node symlink /usr/bin/node
+5 verbose cache add [ 'mapbox-gl-style-lint', null ]
+6 verbose cache add name=undefined spec="mapbox-gl-style-lint" args=["mapbox-gl-style-lint",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: 'mapbox-gl-style-lint',
+7 verbose parsed url   path: 'mapbox-gl-style-lint',
+7 verbose parsed url   href: 'mapbox-gl-style-lint' }
+8 silly lockFile 938c9e48-mapbox-gl-style-lint mapbox-gl-style-lint
+9 verbose lock mapbox-gl-style-lint /Users/peterliu/.npm/938c9e48-mapbox-gl-style-lint.lock
+10 silly lockFile 938c9e48-mapbox-gl-style-lint mapbox-gl-style-lint
+11 silly lockFile 938c9e48-mapbox-gl-style-lint mapbox-gl-style-lint
+12 verbose addNamed [ 'mapbox-gl-style-lint', '' ]
+13 verbose addNamed [ null, '*' ]
+14 silly lockFile 81975c26-mapbox-gl-style-lint mapbox-gl-style-lint@
+15 verbose lock mapbox-gl-style-lint@ /Users/peterliu/.npm/81975c26-mapbox-gl-style-lint.lock
+16 silly addNameRange { name: 'mapbox-gl-style-lint', range: '*', hasData: false }
+17 verbose request where is /mapbox-gl-style-lint
+18 verbose request registry https://registry.npmjs.org/
+19 verbose request id 4ea78664d34025ef
+20 verbose url raw /mapbox-gl-style-lint
+21 verbose url resolving [ 'https://registry.npmjs.org/', './mapbox-gl-style-lint' ]
+22 verbose url resolved https://registry.npmjs.org/mapbox-gl-style-lint
+23 verbose request where is https://registry.npmjs.org/mapbox-gl-style-lint
+24 info trying registry request attempt 1 at 13:27:47
+25 verbose etag "DOHTZ1OS2ZYKXP5YDC3GUK8SK"
+26 http GET https://registry.npmjs.org/mapbox-gl-style-lint
+27 http 304 https://registry.npmjs.org/mapbox-gl-style-lint
+28 silly registry.get cb [ 304,
+28 silly registry.get   { date: 'Thu, 13 Nov 2014 21:27:47 GMT',
+28 silly registry.get     server: 'Apache',
+28 silly registry.get     via: '1.1 varnish',
+28 silly registry.get     'last-modified': 'Thu, 13 Nov 2014 21:27:47 GMT',
+28 silly registry.get     'cache-control': 'max-age=60',
+28 silly registry.get     etag: '"DOHTZ1OS2ZYKXP5YDC3GUK8SK"',
+28 silly registry.get     age: '0',
+28 silly registry.get     'x-served-by': 'cache-lax1430-LAX',
+28 silly registry.get     'x-cache': 'HIT',
+28 silly registry.get     'x-cache-hits': '1',
+28 silly registry.get     'x-timer': 'S1415914067.537213,VS0,VE72',
+28 silly registry.get     vary: 'Accept',
+28 silly registry.get     'content-length': '0',
+28 silly registry.get     'keep-alive': 'timeout=10, max=50',
+28 silly registry.get     connection: 'Keep-Alive' } ]
+29 verbose etag https://registry.npmjs.org/mapbox-gl-style-lint from cache
+30 silly addNameRange number 2 { name: 'mapbox-gl-style-lint', range: '*', hasData: true }
+31 silly addNameRange versions [ 'mapbox-gl-style-lint',
+31 silly addNameRange   [ '0.0.0',
+31 silly addNameRange     '0.0.1',
+31 silly addNameRange     '0.1.0',
+31 silly addNameRange     '0.1.1',
+31 silly addNameRange     '0.2.0',
+31 silly addNameRange     '0.2.1',
+31 silly addNameRange     '0.2.2',
+31 silly addNameRange     '0.2.3',
+31 silly addNameRange     '0.3.0',
+31 silly addNameRange     '0.3.1',
+31 silly addNameRange     '0.3.2',
+31 silly addNameRange     '6.0.0',
+31 silly addNameRange     '6.0.1',
+31 silly addNameRange     '6.0.2',
+31 silly addNameRange     '6.0.3',
+31 silly addNameRange     '6.0.4' ] ]
+32 verbose addNamed [ 'mapbox-gl-style-lint', '6.0.4' ]
+33 verbose addNamed [ '6.0.4', '6.0.4' ]
+34 silly lockFile 0aba40ba-mapbox-gl-style-lint-6-0-4 mapbox-gl-style-lint@6.0.4
+35 verbose lock mapbox-gl-style-lint@6.0.4 /Users/peterliu/.npm/0aba40ba-mapbox-gl-style-lint-6-0-4.lock
+36 silly lockFile 0aba40ba-mapbox-gl-style-lint-6-0-4 mapbox-gl-style-lint@6.0.4
+37 silly lockFile 0aba40ba-mapbox-gl-style-lint-6-0-4 mapbox-gl-style-lint@6.0.4
+38 silly lockFile 81975c26-mapbox-gl-style-lint mapbox-gl-style-lint@
+39 silly lockFile 81975c26-mapbox-gl-style-lint mapbox-gl-style-lint@
+40 silly resolved [ { name: 'mapbox-gl-style-lint',
+40 silly resolved     version: '6.0.4',
+40 silly resolved     description: 'migrate and validate mapbox gl style definitions',
+40 silly resolved     main: 'lib/validate.js',
+40 silly resolved     bin:
+40 silly resolved      { 'gl-style-migrate': 'bin/gl-style-migrate',
+40 silly resolved        'gl-style-validate': 'bin/gl-style-validate',
+40 silly resolved        'gl-style-format': 'bin/gl-style-format' },
+40 silly resolved     scripts:
+40 silly resolved      { test: 'jshint lib/*.js migrations/*.js && tape test/*.js test/migrations/*.js',
+40 silly resolved        cov: 'istanbul cover ./node_modules/.bin/tape test/*.js test/migrations/*.js && coveralls < ./coverage/lcov.info' },
+40 silly resolved     repository:
+40 silly resolved      { type: 'git',
+40 silly resolved        url: 'git@github.com:mapbox/mapbox-gl-style-lint.git' },
+40 silly resolved     license: 'ISC',
+40 silly resolved     devDependencies:
+40 silly resolved      { tape: '^2.12.1',
+40 silly resolved        jshint: '^2.5.0',
+40 silly resolved        coverify: '~1.0.7',
+40 silly resolved        istanbul: '~0.2.11',
+40 silly resolved        coveralls: '~2.10.0',
+40 silly resolved        'mapbox-gl-styles': 'git+https://github.com/mapbox/mapbox-gl-styles.git#mb-pages' },
+40 silly resolved     dependencies:
+40 silly resolved      { csscolorparser: '~1.0.2',
+40 silly resolved        glob: '~4.0.2',
+40 silly resolved        'js-beautify': '^1.4.2',
+40 silly resolved        'jsonlint-lines-primitives': '~1.6.0',
+40 silly resolved        'mapbox-gl-style-spec': '^6.0.0',
+40 silly resolved        minimist: '0.0.8',
+40 silly resolved        rw: '^0.1.4',
+40 silly resolved        'sort-object': '^0.3.2' },
+40 silly resolved     gitHead: '786f1d4e8d534bec3820ebc957d504d5c8d15539',
+40 silly resolved     bugs: { url: 'https://github.com/mapbox/mapbox-gl-style-lint/issues' },
+40 silly resolved     homepage: 'https://github.com/mapbox/mapbox-gl-style-lint',
+40 silly resolved     _id: 'mapbox-gl-style-lint@6.0.4',
+40 silly resolved     _shasum: '41fa0494394a59061030be53d6e0b120db1974ef',
+40 silly resolved     _from: 'mapbox-gl-style-lint@',
+40 silly resolved     _npmVersion: '2.1.3',
+40 silly resolved     _nodeVersion: '0.10.32',
+40 silly resolved     _npmUser: { name: 'jfirebaugh', email: 'john.firebaugh@gmail.com' },
+40 silly resolved     maintainers:
+40 silly resolved      [ [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object],
+40 silly resolved        [Object] ],
+40 silly resolved     dist:
+40 silly resolved      { shasum: '41fa0494394a59061030be53d6e0b120db1974ef',
+40 silly resolved        tarball: 'http://registry.npmjs.org/mapbox-gl-style-lint/-/mapbox-gl-style-lint-6.0.4.tgz' },
+40 silly resolved     directories: {},
+40 silly resolved     _resolved: 'https://registry.npmjs.org/mapbox-gl-style-lint/-/mapbox-gl-style-lint-6.0.4.tgz',
+40 silly resolved     readme: 'ERROR: No README data found!' } ]
+41 info install mapbox-gl-style-lint@6.0.4 into /usr/lib
+42 info installOne mapbox-gl-style-lint@6.0.4
+43 verbose lib/node_modules/mapbox-gl-style-lint unbuild
+44 verbose tar unpack /Users/peterliu/.npm/mapbox-gl-style-lint/6.0.4/package.tgz
+45 silly lockFile 87dc6e80-ode-modules-mapbox-gl-style-lint tar:///usr/lib/node_modules/mapbox-gl-style-lint
+46 verbose lock tar:///usr/lib/node_modules/mapbox-gl-style-lint /Users/peterliu/.npm/87dc6e80-ode-modules-mapbox-gl-style-lint.lock
+47 silly lockFile f243cb08--gl-style-lint-6-0-4-package-tgz tar:///Users/peterliu/.npm/mapbox-gl-style-lint/6.0.4/package.tgz
+48 verbose lock tar:///Users/peterliu/.npm/mapbox-gl-style-lint/6.0.4/package.tgz /Users/peterliu/.npm/f243cb08--gl-style-lint-6-0-4-package-tgz.lock
+49 silly gunzTarPerm modes [ '755', '644' ]
+50 error Error: EACCES, mkdir '/usr/lib/node_modules/mapbox-gl-style-lint'
+50 error  { [Error: EACCES, mkdir '/usr/lib/node_modules/mapbox-gl-style-lint']
+50 error   errno: 3,
+50 error   code: 'EACCES',
+50 error   path: '/usr/lib/node_modules/mapbox-gl-style-lint',
+50 error   fstream_type: 'Directory',
+50 error   fstream_path: '/usr/lib/node_modules/mapbox-gl-style-lint',
+50 error   fstream_class: 'DirWriter',
+50 error   fstream_stack:
+50 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+50 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
+50 error      'Object.oncomplete (fs.js:107:15)' ] }
+51 error Please try running this command again as root/Administrator.
+52 error System Darwin 13.3.0
+53 error command "node" "/usr/local/bin/npm" "install" "-g" "mapbox-gl-style-lint"
+54 error cwd /Users/peterliu/Repos/Explorer
+55 error node -v v0.10.31
+56 error npm -v 1.4.23
+57 error path /usr/lib/node_modules/mapbox-gl-style-lint
+58 error fstream_path /usr/lib/node_modules/mapbox-gl-style-lint
+59 error fstream_type Directory
+60 error fstream_class DirWriter
+61 error code EACCES
+62 error errno 3
+63 error stack Error: EACCES, mkdir '/usr/lib/node_modules/mapbox-gl-style-lint'
+64 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+64 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
+64 error fstream_stack Object.oncomplete (fs.js:107:15)
+65 verbose exit [ 3, true ]
