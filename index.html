@@ -6,6 +6,7 @@
 
     <script src="d3.v3.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.0.6/firebase.js"></script>
 
 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.4.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.3.1/mapbox-gl.css' rel='stylesheet' />
@@ -288,6 +289,7 @@
 
 <script>
 //for(var i=0;i<stylesheet.layers.length;i++){console.log(i+': '+stylesheet.layers[i]['id'])}
+var myFirebaseRef = new Firebase("https://explorer.firebaseio.com/");
 
   var current={'group':'Terrain','zoom': 2, 'quickPick': false, 'stashedStyle':{}, capitalization:[['none','Default'], ['uppercase','UPPERCASE'],['lowercase','lowercase']]};
 
@@ -337,71 +339,9 @@ mapboxgl.util.getJSON('style2.json', function (err, style) {
     hash: true,
     maxZoom:20
   });
-
-d3.select('#map')
-  .on("mousemove", function(event) {
-    if (d3.event.shiftKey) {
-      var coord=[0,0];
-      coord=d3.mouse(this);
-      map.featuresAt({'x':coord[0],'y':coord[1]}, {"radius":1}, function(err, output) {
-        if (err) throw err;
-
-        output = output
-          .map(function(n){return n['_bucket']})
-          .filter(function(n) {return n.indexOf('_case') == -1})
-          .filter(function(n) {return n.indexOf('_stroke') == -1});
-          //console.log('FeaturesAt output: '+output);
-
-        if (output.length>0) {
-            current.active=output[0];
-            activateLayer(output[0]);
-        };
-        if (current.active == output[0]){}
-        else
-          { deactivateLayer(current.active);
-            console.log(current.active+' is now restored')
-            activateLayer(output[0]);
-            current.active = output[0];
-          }
-
-        //console.log(output[0]);
-      });
-    }
-  });
-  //d3.select(window).on('keyup',function(){deactivateLayer(current.active)});
+      myFirebaseRef.set(stylesheet);
 
 
-
-  $('bod')
-    .on('keydown', function(e){if (e.shiftKey == 1)
-      {current.quickPick = true;
-        map.on('hover', function(e){
-          map.featuresAt(e.point, {"radius":1}, function(err, output) {
-            if (err) throw err;
-
-            //take only the id, filter out the border layers and repeats
-            output = output
-              .map(function(n){return n['_bucket']})
-              .filter(function(n) {return n.indexOf('_stroke') == -1});
-
-            if (output.length>0 && current.active == output[0]){console.log('still same')}
-            else
-              {//console.log(current.active);
-              activateLayer(output[0]);
-              deactivateLayer(current.active);
-              current.active = output[0];
-              }
-          }
-          );
-
-        })
-      }})
-    .on('keyup', function(e){if (e.shiftKey == 0)
-      {current.quickPick = false;
-        map.off('hover');
-        deactivateLayer(current.active);
-        current.active=null;
-      }});
 
   //Direct select
   map
@@ -422,21 +362,6 @@ d3.select('#map')
       $('.slider .zoomneedle').css('left', (map.getZoom()*5-2.5)+'%');
       current.zoom = Math.round(map.transform.zoom);}
     );
-
-
-
-
-
-  //getValues();
-
-  // fetch new values if either zoom or active group changes
-  Object.observe(current,
-    function(){
-      console.log('observed a change in current');
-
-    }
-  );
-
 
 
   });
@@ -505,7 +430,7 @@ function onWheel(event) {
   var increment;
 
   if(curElem.attr('prop').indexOf('opacity')==-1)
-    {increment= 0.02} 
+    {increment= 0.02}
   else {increment= 0.02; max=1};
 
 
@@ -606,38 +531,82 @@ function toggleBubble(e) {
 }
 
 function activateLayer(layer){
-  console.log('layer is '+layer);
-  //stash existing style, to be restored on mouseout
   var mapStyle = map.style.layermap[layer].paint;
-  current.stashedStyle = map.style.layermap[layer].paint;
-  window.existingText = mapStyle['text-color'];
-  window.existingFill = mapStyle['fill-color'];
-  window.existingLine = mapStyle['line-color'];
-  window.existingOpacity = mapStyle['fill-opacity'];
 
-  //apply hovered style
-  mapStyle['fill-outline-color'] = "red";
-  mapStyle['line-color'] = "#f18e6b";
-  mapStyle['text-color'] = "red";
-  mapStyle['fill-opacity'] = 0.7;
-  mapStyle['fill-image'] = 'select';
-  mapStyle['background-image'] = 'select';
+  switch(layerRef.Layers[layer]['Category']) {
+    case "Background":
+      current.existingFill = mapStyle['background-color'];
+      current.existingOpacity = mapStyle['background-opacity'];
+
+      mapStyle['background-opacity'] = 0.7;
+      mapStyle['background-image'] = 'select';
+      break;
+
+    case "Water":
+    case "Terrain":
+    case "Buildings":
+      current.existingFill = mapStyle['fill-color'];
+      current.existingOpacity = mapStyle['fill-opacity'];
+
+      mapStyle['fill-opacity'] = 0.7;
+      mapStyle['fill-image'] = 'select';
+      break;
+
+    case "Lines":
+    case "Roads":
+      current.existingOpacity = mapStyle['line-opacity'];
+      current.existingLine = mapStyle['line-color'];
+
+      mapStyle['line-opacity'] = 1;
+      mapStyle['line-color'] = "#f18e6b";
+      break;
+
+    case "Labels":
+      current.existingText = mapStyle['text-color'];
+      mapStyle['text-color'] = "red";
+      break;
+
+    default:
+      alert('activatelayer exception!');
+  };
 
 
   map.style.cascade({transition:!1});
 };
 
 function deactivateLayer(layer){
+  console.log(layer);
   //replace with original style that we stashed
   var mapStyle = map.style.layermap[layer].paint;
-  delete(mapStyle['fill-outline-color']);
-  delete(mapStyle['fill-image']);
-  delete(mapStyle['line-image']);
 
-  delete(mapStyle['background-image']);
-  mapStyle['text-color'] = existingText;  
-  mapStyle['line-color'] = existingLine;
-  mapStyle['fill-opacity'] = existingOpacity;
+  switch(layerRef.Layers[layer]['Category']) {
+    case "Background":
+      mapStyle['background-opacity'] = current.existingOpacity;
+      //mapStyle['background-color'] = current.existingFill;
+      delete(mapStyle['background-image']);
+      break;
+
+    case "Water":
+    case "Terrain":
+    case "Buildings":
+      mapStyle['fill-opacity'] = current.existingOpacity;
+      delete(mapStyle['fill-image']);
+      break;
+
+    case "Lines":
+    case "Roads":
+      mapStyle['line-opacity'] = current.existingOpacity;
+      mapStyle['line-color'] = current.existingLine;
+      break;
+
+    case "Labels":
+      mapStyle['text-color'] = current.existingText;
+      break;
+
+    default:
+      alert('activatelayer exception!');
+  };
+
   map.style.cascade({transition:!1});
 };
 
@@ -679,6 +648,7 @@ function setValue(layer, type, prop, value, convert, instant){
   function set(value){
     stylesheet['layers'][layer][type][prop] = value;
     map.style.layermap[layerId][type][prop] = value
+    //myFirebaseRef.set(stylesheet);
   };
 
   switch (convert){
@@ -777,7 +747,7 @@ function setValue(layer, type, prop, value, convert, instant){
 
 
 function getValues(group) {
-  if(group){
+  
     $('.editing .inputarea').each(function(){
         var layer = $(this).attr('layer');
         var type = $(this).attr('type');
@@ -1050,7 +1020,7 @@ function getValues(group) {
 
         }
     })
-  }
+  
 };
 
 function updateSliderStop(slider, data, layer, type, prop){

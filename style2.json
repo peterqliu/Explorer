@@ -1026,11 +1026,11 @@
     "layout": {
       "text-field": "{name_en}",
       "text-transform": "none",
-      "text-line-height": 1.2,
+      "text-line-height": 1.5,
       "text-font": "Open Sans Italic",
       "text-max-size": 26,
       "text-max-width": 7,
-      "text-letter-spacing":0.05,
+      "text-letter-spacing":0.25,
       "text-padding":50
     },
     "paint": {
