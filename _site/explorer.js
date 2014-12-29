@@ -77,103 +77,6 @@ mapboxgl.util.getJSON('style2.json', function (err, style) {
 
 
 
-// Mousewheel incrementing
-
-var EventUtil = {
-
-  addHandler: function(element, type, handler){
-        if (element.addEventListener){
-            element.addEventListener(type, handler, false);
-        } else if (element.attachEvent){
-            element.attachEvent("on" + type, handler);
-        } else {
-            element["on" + type] = handler;
-        }
-    },
-
-  removeHandler: function(element, type, handler){
-        if (element.removeEventListener){
-            element.removeEventListener(type, handler, false);
-        } else if (element.detachEvent){
-            element.detachEvent("on" + type, handler);
-        } else {
-            element["on" + type] = null;
-        }
-    },
-
-  getEvent: function(event) {
-        return event ? event : window.event;
-    },
-
-  getTarget: function(event) {
-    return event.target || event.srcElement;
-  },
-
-  getWheelDelta: function(event) {
-        if (event.wheelDelta){
-          //console.log(event.wheelDelta)
-            return event.wheelDelta;
-        } else {
-            return -event.detail * 40;
-        }
-    },
-
-  preventDefault: function(event) {
-        if (event.preventDefault){
-            event.preventDefault();
-        } else {
-            event.returnValue = false;
-        }
-    }
-};
-
-function onWheel(event) {
-  event = EventUtil.getEvent(event);
-  var curElem=d3.select('.wheelable:hover');
-  var input = curElem.select('.input')[0][0];
-  var zoom = parseInt(curElem.attr('zoom'));
-  var curVal = parseFloat(input.innerHTML);
-  var delta = EventUtil.getWheelDelta(event);
-  var min=0;
-  var max=99;
-  var increment;
-
-  if(curElem.attr('prop').indexOf('opacity')==-1)
-    {increment= 0.02}
-  else {increment= 0.02; max=1};
-
-
-
-  var newVal=curVal-delta*(increment*0.05);
-  if (newVal<=max && newVal>=min) {
-    curVal=newVal;
-  }
- input.innerHTML = parseFloat(curVal).toFixed(2);
-  var layer = $('.wheelable:hover').attr('layer');
-  var type = $('.wheelable:hover').attr('type');
-  var prop = $('.wheelable:hover').attr('prop');
-  var val = $('.wheelable:hover .input')[0].innerHTML;
-
-  if(zoom>=0){
-    val=[zoom, parseFloat(val)]};
-  setValue(layer, type, prop, val, null, {transition:!1});
-    EventUtil.preventDefault(event);
-}
-
-$(".dropdown")
-    .on('mouseenter', 'span.wheelable, div.wheelable', function(){
-      EventUtil.addHandler(document,'mousewheel',onWheel);
-      EventUtil.addHandler(document,'DOMMouseScroll',onWheel);
-    })
-    .on('mouseleave', 'span.wheelable, div.wheelable', function(){
-    EventUtil.removeHandler(document,'mousewheel',onWheel);
-    EventUtil.removeHandler(document,'DOMMouseScroll',onWheel);
-    });
-;
-
-
-
-
 
 //Get features at the mouse position, and then either 1) surfaces edit UI (if quickpick active, or only one feature present) or 2) serves up the list of features
 
@@ -429,8 +332,6 @@ function setValue(layer, type, prop, value, convert, instant){
 
             //Edit existing anchor
             if(typeof path === 'object') {
-              //console.log(path);
-              //console.log(value);
                 var index = path.stops.map(function(e){return e[0]}).indexOf(value[0]);
                 path.stops[index][1] = value[1];
                 console.log('we just changed an anchor value. Overall, the new value is: '+JSON.stringify(path));
@@ -517,6 +418,39 @@ function getValues(group) {
             else {
               inputarea
                 .attr('mode','global')
+                .on('mousewheel',function(e){
+                  console.log(event.wheelDeltaY);
+
+                    var curElem=d3.select(this);
+                    var input = curElem.select('.input')[0][0];
+                    var zoom = parseInt(curElem.attr('zoom'));
+                    var curVal = parseFloat(input.innerHTML);
+                    var delta = event.wheelDeltaY;
+                    var min=0;
+                    var max=99;
+                    var increment;
+
+                    if(curElem.attr('prop').indexOf('opacity')==-1)
+                      {increment= 0.02}
+                    else {increment= 0.02; max=1};
+
+
+
+                    var newVal=curVal-delta*(increment*0.05);
+                    if (newVal<=max && newVal>=min) {
+                      curVal=newVal;
+                    }
+                   input.innerHTML = parseFloat(curVal).toFixed(2);
+                    var layer = curElem.attr('layer');
+                    var type = curElem.attr('type');
+                    var prop = curElem.attr('prop');
+                    var val = $('.wheelable:hover .input')[0].innerHTML;
+
+                    if(zoom>=0){
+                      val=[zoom, parseFloat(val)]};
+                    setValue(layer, type, prop, val, null, {transition:!1});
+                      EventUtil.preventDefault(event);
+                })
                 .selectAll('.input')
                 .data([1])
                 .enter()
@@ -539,6 +473,7 @@ function getValues(group) {
                   getValues('group');
                   $(this).trigger('mouseout').trigger('mouseover');
                 });
+
               //specific to the color UI: nonwheelable, and append the color picker (inspired by http://codepen.io/Zaku/details/fyLKw)
               if(inputarea.classed('color')) {
 
@@ -764,7 +699,40 @@ function updateSliderStop(slider, data, layer, type, prop){
       })
       .on('mousewheel',function(){
         event.preventDefault();
+        console.log(event.wheelDeltaY);
+
+        var curElem=d3.select(this);
+        var input = curElem.select('.input')[0][0];
+        var zoom = parseInt(curElem.attr('zoom'));
+        var curVal = parseFloat(input.innerHTML);
+        var delta = event.wheelDeltaY;
+        var min=0;
+        var max=99;
+        var increment;
+
+        if(curElem.attr('prop').indexOf('opacity')==-1)
+          {increment= 0.02}
+        else {increment= 0.02; max=1};
+
+
+
+        var newVal=curVal-delta*(increment*0.05);
+        if (newVal<=max && newVal>=min) {
+          curVal=newVal;
+        }
+        
+        input.innerHTML = parseFloat(curVal).toFixed(2);
+        var layer = curElem.attr('layer');
+        var type = curElem.attr('type');
+        var prop = curElem.attr('prop');
+        var val = $('.wheelable:hover .input')[0].innerHTML;
+
+        val=[zoom, parseFloat(val)];
+        setValue(layer, type, prop, val, null, {transition:!1});
+        EventUtil.preventDefault(event);
         updateSliderStop(slider, data, layer, type, prop)})
+
+
       .attr('style',function(d,i) {return 'left:'+d[0]*10+'px'})
         .append('div')
         .attr('class','stopbubble')
