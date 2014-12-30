@@ -274,9 +274,9 @@
 
           <div class='tabsection fill-gray'>
             <div class='rounded-toggle bold'>
-              <input id='pizza' type='radio' name='rtoggle' value='pizza' checked='checked' onclick="$('.active').toggleClass('active'); $('#styling').addClass('active')">
+              <input id='pizza' type='radio' name='rtoggle' value='pizza' checked='checked' onclick="d3.selectAll('.active').classed({'active':false}); d3.select('#styling').classed({'active':true})">
               <label for='pizza'>STYLE</label>
-              <input href='#format' id='penny' type='radio' name='rtoggle' value='penny' onclick="$('.active').toggleClass('active'); $('#format').addClass('active')">
+              <input href='#format' id='penny' type='radio' name='rtoggle' value='penny' onclick="d3.select('.active').classed({'active':false}); d3.select('#format').classed({'active':true})">
               <label for='penny'>TEXT FORMAT</label>
             </div>
           </div>

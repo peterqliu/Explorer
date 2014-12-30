@@ -483,7 +483,7 @@ function getValues(group) {
                 .insert('div','.input')
                 .attr('class','colorsample tooltip fr')
                 .attr('style', 'background-color:'+value)
-                .attr('onclick','d3.select(this).toggleClass("open")');
+                .attr('onclick','d3.select(this).classed("open", !d3.select(this).classed("open"))');
 
               inputarea.select('.input')
                 .on('keyup', function(){
