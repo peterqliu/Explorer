@@ -422,7 +422,6 @@ function getValues(group) {
               inputarea
                 .attr('mode','global')
                 .on('mousewheel',function(e){
-                  console.log(event.wheelDeltaY);
 
                     var curElem=d3.select(this);
                     var input = curElem.select('.input')[0][0];
@@ -447,12 +446,11 @@ function getValues(group) {
                     var layer = curElem.attr('layer');
                     var type = curElem.attr('type');
                     var prop = curElem.attr('prop');
-                    var val = $('.wheelable:hover .input')[0].innerHTML;
+                    var val = newVal;
 
                     if(zoom>=0){
                       val=[zoom, parseFloat(val)]};
                     setValue(layer, type, prop, val, null, {transition:!1});
-                      EventUtil.preventDefault(event);
                 })
                 .selectAll('.input')
                 .data([1])
@@ -656,6 +654,9 @@ function updateSliderStop(slider, data, layer, type, prop){
       .selectAll('.stop')
       .data(data, function(d) {return d});
 
+    //moving ramp stops
+
+    var stopsWithBubbles= 
     stops
       .enter()
       .append('div')
@@ -664,12 +665,12 @@ function updateSliderStop(slider, data, layer, type, prop){
       .attr('type', type)
       .attr('prop', prop)
       .attr('zoom',function(d){return d[0]})
-      .on('mousedown', function(){
+      .attr('style',function(d,i) {return 'left:'+d[0]*10+'px'})
+      .on('mousedown', function(d){
         d3.event.preventDefault(); // disable text dragging
-
         var startx=d3.event.clientX;
-        var stop=d3.select(this);
-        var startoffset=Math.round(stop[0]['offsetLeft']); 
+        var startoffset=d[0]*10; 
+        var currentstop=d3.select(this);
 
         var w = d3.select(window)
             .on("mousemove", mousemove)
@@ -677,11 +678,12 @@ function updateSliderStop(slider, data, layer, type, prop){
 
         function mousemove() {
           var currentx = startoffset+d3.event.clientX-startx;
-
           if (currentx >= 0 && currentx <= 200 && data.map(function(e){return e[0]}).indexOf(Math.round(currentx/10))==-1)
           {
+          
+            console.log(currentx);
             updateSliderStop(slider, data, layer, type, prop);
-            stop
+            currentstop
               .attr('style', function() {return 'left:' + currentx +'px'})
               .attr('zoom', Math.round(currentx*0.1));
           }
@@ -700,14 +702,16 @@ function updateSliderStop(slider, data, layer, type, prop){
           };
         }
       })
-      .on('mousewheel',function(){
+
+      //mousewheeling to increment value
+      .on('mousewheel',function(d){
         event.preventDefault();
         console.log(event.wheelDeltaY);
 
         var curElem=d3.select(this);
         var input = curElem.select('.input')[0][0];
-        var zoom = parseInt(curElem.attr('zoom'));
-        var curVal = parseFloat(input.innerHTML);
+        var zoom = d[0];
+        var curVal = parseFloat(d[1]);
         var delta = event.wheelDeltaY;
         var min=0;
         var max=99;
@@ -728,22 +732,37 @@ function updateSliderStop(slider, data, layer, type, prop){
         var layer = curElem.attr('layer');
         var type = curElem.attr('type');
         var prop = curElem.attr('prop');
-        var val = $('.wheelable:hover .input')[0].innerHTML;
+        var val = curVal;
 
         val=[zoom, parseFloat(val)];
+
         setValue(layer, type, prop, val, null, {transition:!1});
-        EventUtil.preventDefault(event);
         updateSliderStop(slider, data, layer, type, prop)})
 
-
-      .attr('style',function(d,i) {return 'left:'+d[0]*10+'px'})
+      //draw stop bubble
         .append('div')
-        .attr('class','stopbubble')
+        .attr('class','stopbubble');
+
+
+        stopsWithBubbles
+          .append('span')
+          .on('click', function(d){
+          console.log(d);
+          var zoom = d[0];
+
+          setValue(layer, type, prop, [zoom, 1], 'delete', null);
+          updateSliderStop(slider, data, layer, type, prop)
+        })
+        .text('✕ ');
+
+        stopsWithBubbles
         .append('div')
         .attr('class','input')
         .attr('contenteditable','true')
         .text(function(d,i){return d[1]});
 
+
+  //draw each stop's dot
   stops.selectAll('.dot')
     .data([1])
     .enter()
@@ -751,18 +770,7 @@ function updateSliderStop(slider, data, layer, type, prop){
     .attr('class','dot')
     .text('⋅');
 
-  stops.select('.stop .stopbubble')
-    .selectAll('span')
-    .data([1])
-    .enter()
-    .insert('span', '.input')
-    .on('click', function(d){
-      var zoom = d3.select(this).parent().parent().attr('zoom');
 
-      setValue(layer, type, prop, [zoom, 1], 'delete', null);
-      updateSliderStop(slider, data, layer, type, prop)
-    })
-    .text('✕ ');
 
   stops.exit().remove();
 
