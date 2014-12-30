@@ -66,7 +66,7 @@ mapboxgl.util.getJSON('style2.json', function (err, style) {
         //toggle bubble visibility, whenever map is clicked
         $('.direct-select')
           .style('-webkit-transform', 'translateX('+e.point.x+'px) translateY('+e.point.y+'px)')
-          .classed({'visible':true});
+          .classed("visible", !d3.select('.direct-select').classed("visible"));
         $('.editing').classed({'editing':false})
       }
     })
