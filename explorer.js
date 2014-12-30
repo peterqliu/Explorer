@@ -2,11 +2,14 @@
 //for(var i=0;i<stylesheet.layers.length;i++){console.log(i+': '+stylesheet.layers[i]['id'])}
 
   var current={'group':'Terrain','zoom': 2, 'quickPick': false, 'stashedStyle':{}, capitalization:[['none','Default'], ['uppercase','UPPERCASE'],['lowercase','lowercase']]};
-
+function $(x) {
+  console.log(x.length);
+  return d3.selectAll(x);
+}
 
   function closeDropdown() {
-    $('.direct-select').removeClass('visible');
-    $('.dropdown').removeClass('expand');
+    $('.direct-select').classed({'visible':false});
+    $('.dropdown').classed({'expand':false});
   };
 
   function formatText(input){return input.charAt(0).toUpperCase()+ input.slice(1).replace(/_/g, ' ')};
@@ -62,13 +65,13 @@ mapboxgl.util.getJSON('style2.json', function (err, style) {
         toggleBubble(e);
         //toggle bubble visibility, whenever map is clicked
         $('.direct-select')
-          .css('-webkit-transform', 'translateX('+e.point.x+'px) translateY('+e.point.y+'px)')
-          .toggleClass('visible');
-        $('.editing').removeClass('editing')
+          .style('-webkit-transform', 'translateX('+e.point.x+'px) translateY('+e.point.y+'px)')
+          .classed({'visible':true});
+        $('.editing').classed({'editing':false})
       }
     })
     .on('zoom', function() {
-      $('.slider .zoomneedle').css('left', (map.getZoom()*5-2.5)+'%');
+      $('.slider .zoomneedle').style('left', (map.getZoom()*5-2.5)+'%');
       current.zoom = Math.round(map.transform.zoom);}
     );
 
@@ -88,7 +91,7 @@ function toggleBubble(e) {
         if (err) throw err;
         var latlon=map.unproject(e.point);
         //var center= map.project(map.getCenter());
-        $('.expand').removeClass('expand');
+        $('.expand').classed({'expand':false});
 
         //take only the id, filter out the border layers and repeats
         output = output
@@ -134,7 +137,7 @@ function toggleBubble(e) {
         map.on('move', function(){
           var pos=map.project(latlon);
           $('.visible.direct-select')
-            .css('-webkit-transform', 'translateX('+pos.x+'px) translateY('+pos.y+'px)');
+            .style('-webkit-transform', 'translateX('+pos.x+'px) translateY('+pos.y+'px)');
 
           var center = map.project(map.getCenter());
           window.differential=[pos.x-center.x, pos.y-center.y];
@@ -225,8 +228,8 @@ function deactivateLayer(layer){
 function showEditView(d, i, latlon) {
   if ($('.visible').length>=1){
     //when <li> is clicked, center map on the bubble, and flip the bubble
-    $('.direct-select li').trigger('mouseout');
-    $('.dropdown').toggleClass('expand');
+    //$('.direct-select li').trigger('mouseout');
+    $('.dropdown').classed({'expand':true});
     map.panTo(latlon,{duration:600});
 
     //Set title
@@ -237,7 +240,7 @@ function showEditView(d, i, latlon) {
     var MappingScheme= layerRef['Categories'][selectedGroup['Category']]['MappingScheme'];
 
     //Show proper edit UI based on category of the clicked layer
-    $('#'+selectedCat).toggleClass('editing');
+    $('#'+selectedCat).classed({'editing':true});
 
 
     //define layer of each inputarea
@@ -357,9 +360,9 @@ function setValue(layer, type, prop, value, convert, instant){
 function getValues(group) {
   
     $('.editing .inputarea').each(function(){
-        var layer = $(this).attr('layer');
-        var type = $(this).attr('type');
-        var prop = $(this).attr('prop');
+        var layer = d3.select(this).attr('layer');
+        var type = d3.select(this).attr('type');
+        var prop = d3.select(this).attr('prop');
         var value = stylesheet.layers[layer][type][prop];
         var inputarea = d3.select(this);
 
@@ -459,7 +462,7 @@ function getValues(group) {
                 .attr('contenteditable','true')
                 .text(value)
                 .on('keyup', function(){
-                  var newVal = $(this)[0].innerHTML;
+                  var newVal = d3.select(this)[0].innerHTML;
                   setValue(layer, type, prop, newVal, null);
                 });
 
@@ -471,7 +474,7 @@ function getValues(group) {
                 .on('click', function() {
                   setValue(layer, type, prop, [ [current.zoom, stylesheet.layers[layer][type][prop]] ], 'anchor', null);
                   getValues('group');
-                  $(this).trigger('mouseout').trigger('mouseover');
+                  d3.select(this).trigger('mouseout').trigger('mouseover');
                 });
 
               //specific to the color UI: nonwheelable, and append the color picker (inspired by http://codepen.io/Zaku/details/fyLKw)
@@ -482,11 +485,11 @@ function getValues(group) {
                 .insert('div','.input')
                 .attr('class','colorsample tooltip fr')
                 .attr('style', 'background-color:'+value)
-                .attr('onclick','$(this).toggleClass("open")');
+                .attr('onclick','d3.select(this).toggleClass("open")');
 
               inputarea.select('.input')
                 .on('keyup', function(){
-                  var newVal= $(this)[0].innerHTML;
+                  var newVal= d3.select(this)[0].innerHTML;
                   inputarea.select('.colorsample')[0][0].style.background=newVal;
                   setValue(layer, type, prop, newVal, null);
                   value=newVal;
@@ -527,7 +530,7 @@ function getValues(group) {
                   l = ~~( y / maxY * 10000) / 100;
                   draw();
                   $('.downarrow')
-                    .css('-webkit-transform','translateX('+x+'px)');
+                    .style('-webkit-transform','translateX('+x+'px)');
                 })
                 .on("mousewheel", function(e) {
                     event.preventDefault();
@@ -571,7 +574,7 @@ function getValues(group) {
                   rgb = new d3.rgb(hsl);
 
                   colorbox.attr("style", "background-color: " + hsl.toString());
-                  $('.colorcircle').css('background-color',hsl.toString());
+                  $('.colorcircle').style('background-color',hsl.toString());
                   inputarea.select('.colorsample').attr("style", "background-color: " + hsl.toString());
                   inputarea.select('.input')
                     .text(hsl.toString());
@@ -596,7 +599,7 @@ function getValues(group) {
             .on('click', function(){
               setValue(layer, type, prop, 1, 'global', null);
               getValues('group');
-              $(this).trigger('mouseout').trigger('mouseover');
+              d3.select(this).trigger('mouseout').trigger('mouseover');
             });
 
           //set up the basic slider and needle
@@ -665,7 +668,7 @@ function updateSliderStop(slider, data, layer, type, prop){
         d3.event.preventDefault(); // disable text dragging
 
         var startx=d3.event.clientX;
-        var stop=$(this);
+        var stop=d3.select(this);
         var startoffset=Math.round(stop[0]['offsetLeft']); 
 
         var w = d3.select(window)
@@ -754,7 +757,7 @@ function updateSliderStop(slider, data, layer, type, prop){
     .enter()
     .insert('span', '.input')
     .on('click', function(d){
-      var zoom = $(this).parent().parent().attr('zoom');
+      var zoom = d3.select(this).parent().parent().attr('zoom');
 
       setValue(layer, type, prop, [zoom, 1], 'delete', null);
       updateSliderStop(slider, data, layer, type, prop)
