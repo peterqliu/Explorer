@@ -460,7 +460,8 @@ function getValues(group) {
                 .attr('contenteditable','true')
                 .text(value)
                 .on('keyup', function(){
-                  var newVal = d3.select(this)[0].innerHTML;
+                  var newVal = d3.select(this)[0][0].innerHTML;
+                  console.log(newVal);
                   setValue(layer, type, prop, newVal, null);
                 });
 
@@ -487,7 +488,7 @@ function getValues(group) {
 
               inputarea.select('.input')
                 .on('keyup', function(){
-                  var newVal= d3.select(this)[0].innerHTML;
+                  var newVal= d3.select(this)[0][0].innerHTML;
                   inputarea.select('.colorsample')[0][0].style.background=newVal;
                   setValue(layer, type, prop, newVal, null);
                   value=newVal;
