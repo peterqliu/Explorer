@@ -296,7 +296,6 @@ function setValue(layer, type, prop, value, convert, instant){
             console.log('this array is currently '+JSON.stringify(path['stops'])+'. The value passed in was '+value);
             if (typeof path === 'object' && path['stops'].length > 1) {
               var index = path['stops'].map(function(e){return e[0]}).indexOf(parseFloat(value[0]));
-              //console.log(index);
               mapObject['stops'].splice(index, 1);
               //console.log('we just removed an anchor. the new value is: '+JSON.stringify(path));
             }
@@ -334,7 +333,7 @@ function setValue(layer, type, prop, value, convert, instant){
             //Edit existing anchor
             if(typeof path === 'object') {
                 var index = path.stops.map(function(e){return e[0]}).indexOf(value[0]);
-                path.stops[index][1] = value[1];
+                path.stops[index][1] = Math.round(value[1]*100)/100;
                 console.log('we just changed an anchor value. Overall, the new value is: '+JSON.stringify(path));
             }
             else {
@@ -373,8 +372,8 @@ function getValues(group) {
         //set title
         d3.selectAll('h2')
             .on('mousewheel',function(e){
-              if($('input:hover').length==0 && $('.inputarea:hover').length==0){
                 event.preventDefault();
+              if($('input:hover').length==0 && $('.inputarea:hover').length==0){
                 map.zoomTo(map.getZoom()+event.wheelDeltaY*0.01,{offset:differential, animate:false }
               )};
             });
@@ -426,6 +425,7 @@ function getValues(group) {
               inputarea
                 .attr('mode','global')
                 .on('mousewheel',function(e){
+                    event.preventDefault();
 
                     var curElem=d3.select(this);
                     var input = curElem.select('.input')[0][0];
@@ -686,7 +686,6 @@ function updateSliderStop(slider, data, layer, type, prop){
           if (currentx >= 0 && currentx <= 200 && data.map(function(e){return e[0]}).indexOf(Math.round(currentx/10))==-1)
           {
           
-            console.log(currentx);
             updateSliderStop(slider, data, layer, type, prop);
             currentstop
               .attr('style', function() {return 'left:' + currentx +'px'})
