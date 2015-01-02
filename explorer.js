@@ -3,7 +3,6 @@
 
   var current={'group':'Terrain','zoom': 2, 'quickPick': false, 'stashedStyle':{}, capitalization:[['none','Default'], ['uppercase','UPPERCASE'],['lowercase','lowercase']]};
 function $(x) {
-  console.log(x.length);
   return d3.selectAll(x);
 }
 
@@ -255,14 +254,13 @@ function showEditView(d, i, latlon) {
 // Master value editor: updates and applies new style on every keystroke, and converts prop modes accordingly
 
 function setValue(layer, type, prop, value, convert, instant){
-  var layerId = stylesheet['layers'][layer]['id'];
-
-  var path = stylesheet['layers'][layer][type][prop];
-  var mapObject = map.style.layermap[layerId][type][prop];
+  var layerindex = stylesheet.layers.map(function(e) { return e.id; }).indexOf(layer);
+  var path = stylesheet['layers'][layerindex][type][prop];
+  var mapObject = map.style.layermap[layer][type][prop];
 
   function set(value){
-    stylesheet['layers'][layer][type][prop] = value;
-    map.style.layermap[layerId][type][prop] = value
+    stylesheet['layers'][layerindex][type][prop] = value;
+    map.style.layermap[layer][type][prop] = value
   };
 
   switch (convert){
@@ -346,7 +344,10 @@ function setValue(layer, type, prop, value, convert, instant){
             };
             break;
         }
+    //Apply paint changes
     map.style.cascade(instant);
+
+    //Apply (any) layout changes
     if (type=='layout'){map.setStyle(stylesheet)}
 };
 
@@ -360,13 +361,16 @@ function setValue(layer, type, prop, value, convert, instant){
 function getValues(group) {
   
     $('.editing .inputarea').each(function(){
-        var layer = d3.select(this).attr('layer');
-        var type = d3.select(this).attr('type');
-        var prop = d3.select(this).attr('prop');
-        var value = stylesheet.layers[layer][type][prop];
         var inputarea = d3.select(this);
-
+        var layer = inputarea.attr('layer');
+        var type = inputarea.attr('type');
+        var prop = inputarea.attr('prop');
+        var value = map.style.layermap[layer][type][prop];
+        console.log(value);
+        //remove elements from previous inputs
         inputarea.selectAll('.slider, .input, .colorsample, .colordrawer, select').remove();
+
+        //set title
         d3.selectAll('h2')
             .on('mousewheel',function(e){
               if($('input:hover').length==0 && $('.inputarea:hover').length==0){

@@ -2,7 +2,7 @@
   "land": {
     "defaultVisibility": true,
     "Category":"Background",
-    "LayerMapping":[0, 10]
+    "LayerMapping":["land", "hillshade"]
   },
   "water": {
     "defaultVisibility": true,
@@ -118,127 +118,127 @@
   "building": {
     "defaultVisibility": true,
     "Category": "Buildings",
-    "LayerMapping":[36, 37, 35]
+    "LayerMapping":["building", "building_stroke", "building_case_siding"]
   },
   "railroad": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[33, 34]
+    "LayerMapping":["rail", "railroad_hashes"]
   },
   "elevated_railroad": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[38, 39]
+    "LayerMapping":["elevated_railroad", "elevated_rail_hashes"]
   },
   "elevated_thoroughfare": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[47, 46]
+    "LayerMapping":["elevated_thoroughfare", "elevated_thoroughfare_case"]
   },
   "walking_path": {
     "defaultVisibility": true,
     "Category": "Lines",
-    "LayerMapping":[48]
+    "LayerMapping":["walking_path"]
   },
   "elevated_street": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[42, 40]
+    "LayerMapping":["elevated_street", "elevated_street_case"]
   },
   "elevated_interchange": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[45, 43]
+    "LayerMapping":["elevated_interchange", "elevated_interchange_case"]
   },
   "elevated_motorway": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[44, 41]
+    "LayerMapping":["elevated_motorway", "elevated_motorway_case"]
   },
   "small_lake_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[51]
+    "LayerMapping":["small_lake_label"]
   },
   "big_lake_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[52]
+    "LayerMapping":["big_lake_label"]
   },
   "ocean_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[53]
+    "LayerMapping":["ocean_label"]
   },
   "country_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[54]
+    "LayerMapping":["country_label"]
   },
   "province_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[55]
+    "LayerMapping":["province_label"]
   },
   "big_city_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[56]
+    "LayerMapping":["big_city_label"]
   },
   "medium_city_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[57]
+    "LayerMapping":["medium_city_label"]
   },
   "small_city_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[58]
+    "LayerMapping":["small_city_label"]
   },
   "big_town_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[59]
+    "LayerMapping":["big_town_label"]
   },
   "small_town_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[60]
+    "LayerMapping":["small_town_label"]
   },
   "neighborhood_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[61]
+    "LayerMapping":["neighborhood_label"]
   },
   "motorway_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[62]
+    "LayerMapping":["motorway_label"]
   },
   "greenery_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[63]
+    "LayerMapping":["greenery_label"]
   },
   "urban_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[64]
+    "LayerMapping":["urban_label"]
   },
   "food/retail_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[65]
+    "LayerMapping":["food/retail_label"]
   },
   "thoroughfare_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[69]
+    "LayerMapping":["thoroughfare_label"]
   },
   "street_label": {
     "defaultVisibility": true,
     "Category": "Labels",
-    "LayerMapping":[70]
+    "LayerMapping":["street_label"]
   }
 },
 
