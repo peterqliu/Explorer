@@ -475,7 +475,7 @@ function getValues(group) {
                 .classed('global', false)
                 .classed('anchor', true)
                 .on('click', function() {
-                  setValue(layer, type, prop, [ [current.zoom, stylesheet.layers[layer][type][prop]] ], 'anchor', null);
+                  setValue(layer, type, prop, [ [current.zoom, map.style.layermap[layer][type][prop]] ], 'anchor', null);
                   getValues('group');
                   d3.select(this).trigger('mouseout').trigger('mouseover');
                 });
@@ -553,7 +553,7 @@ function getValues(group) {
                   inputarea
                     .select('.colorsample')
                     .classed('open', false);
-                  value=stylesheet.layers[layer][type][prop];
+                  value=map.style.layermap[layer][type][prop];
                 })
                 .on('mouseleave', function(){
                     colorbox.attr("style", "background-color: " + value);

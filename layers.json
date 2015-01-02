@@ -7,52 +7,52 @@
   "water": {
     "defaultVisibility": true,
     "Category": "Water",
-    "LayerMapping":[11, 12]
+    "LayerMapping":["water", "water_stroke"]
   },
   "woods_&_forest": {
     "defaultVisibility": true,
     "Category": "Terrain",
-    "LayerMapping":[1]
+    "LayerMapping":["woods_&_forest"]
   },
   "scrub": {
     "defaultVisibility": true,
     "Category": "Terrain",
-    "LayerMapping":[2]
+    "LayerMapping":["scrub"]
   },
   "crops_&_grass": {
     "defaultVisibility": true,
     "Category": "Terrain",
-    "LayerMapping":[3]
+    "LayerMapping":["crops_&_grass"]
   },
   "greenery": {
     "defaultVisibility": true,
     "Category": "Terrain",
-    "LayerMapping": [9]
+    "LayerMapping": ["greenery"]
   },
   "rocky_terrain": {
     "defaultVisibility": true,
     "Category": "Terrain",
-    "LayerMapping":[5]
+    "LayerMapping":["rocky_terrain"]
   },
   "school": {
     "defaultVisibility": true,
     "Category": "Terrain",
-    "LayerMapping":[6]
+    "LayerMapping":["school"]
   },
   "airport": {
     "defaultVisibility": true,
     "Category": "Terrain",
-    "LayerMapping":[7]
+    "LayerMapping":["airport"]
   },
   "hospital": {
     "defaultVisibility": true,
     "Category": "Terrain",
-    "LayerMapping":[8]
+    "LayerMapping":["hospital"]
   },
   "hillshade": {
     "defaultVisibility": true,
     "Category": "hillshade",
-    "LayerMapping":[10]
+    "LayerMapping":["hillshade"]
   },
   "country_border": {
     "defaultVisibility": true,
@@ -62,7 +62,7 @@
   "province_border": {
     "defaultVisibility": true,
     "Category": "Lines",
-    "LayerMapping":[14]
+    "LayerMapping":["province_border"]
   },
   "contour_line": {
     "defaultVisibility": true,
@@ -72,48 +72,48 @@
   "motorway_tunnel": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[20, 15]
+    "LayerMapping":["motorway_tunnel", "motorway_tunnel_case"]
   },
   "thoroughfare_tunnel": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[19, 16]
+    "LayerMapping":["thoroughfare_tunnel", "thoroughfare_tunnel_case"]
   },
   "interchange_tunnel": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[21, 17]
+    "LayerMapping":["interchange_tunnel", "interchange_tunnel_case"]
   },
   "street_tunnel": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[22, 18]
+    "LayerMapping":["street_tunnel", "street_tunnel_case"]
   },
 
   "street": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[26, 24]
+    "LayerMapping":["street", "street_case"]
   },
   "service_road": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[27, 25]
+    "LayerMapping":["service_road", "service_road_case"]
   },
   "thoroughfare": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[29, 23]
+    "LayerMapping":["thoroughfare", "thoroughfare_case"]
   },
   "interchange": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[32, 28]
+    "LayerMapping":["interchange", "interchange_case"]
   },
   "motorway": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":[31, 30]
+    "LayerMapping":["motorway", "motorway_case"]
   },
   "building": {
     "defaultVisibility": true,

@@ -236,7 +236,7 @@
     }
   },
   {
-    "id": "tunnel_motorway_case",
+    "id": "motorway_tunnel_case",
     "ref": "motorway_tunnel",
     "paint": {
       "line-color": "#736326",
@@ -249,7 +249,7 @@
     }
   },
   {
-    "id": "tunnel_thoroughfare_case",
+    "id": "thoroughfare_tunnel_case",
     "ref": "thoroughfare_tunnel",
     "paint": {
       "line-color": "#aaa",
@@ -274,7 +274,7 @@
     }
   },
   {
-    "id": "tunnel_street_case",
+    "id": "street_tunnel_case",
     "ref": "street_tunnel",
     "paint": {
       "line-color": "#aaa",
