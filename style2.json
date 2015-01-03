@@ -385,7 +385,7 @@
     }
   },
   {
-    "id": "service_case",
+    "id": "service_road_case",
     "ref": "service_road",
     "paint": {
       "line-color": "#aaa",

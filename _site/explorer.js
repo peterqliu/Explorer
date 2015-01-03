@@ -1,10 +1,14 @@
 
 //for(var i=0;i<stylesheet.layers.length;i++){console.log(i+': '+stylesheet.layers[i]['id'])}
 
-  var current={'group':'Terrain','zoom': 2, 'quickPick': false, 'stashedStyle':{}, capitalization:[['none','Default'], ['uppercase','UPPERCASE'],['lowercase','lowercase']]};
+  var current={'history':[], 'quickPick': false, 'stashedStyle':{}, capitalization:[['none','Default'], ['uppercase','UPPERCASE'],['lowercase','lowercase']]};
+  var recordChange;
+  var fb = new Firebase("https://explorer.firebaseio.com");
+
 function $(x) {
   return d3.selectAll(x);
 }
+
 
   function closeDropdown() {
     $('.direct-select').classed({'visible':false});
@@ -37,7 +41,7 @@ mapboxgl.util.getJSON('style2.json', function (err, style) {
   if (err) throw err;
 
   window.stylesheet=style;
-
+  fb.set(stylesheet);
   style.layers.forEach(function(layer) {layer.interactive = true});
 
 
@@ -71,8 +75,7 @@ mapboxgl.util.getJSON('style2.json', function (err, style) {
     })
     .on('zoom', function() {
       $('.slider .zoomneedle').style('left', (map.getZoom()*5-2.5)+'%');
-      current.zoom = Math.round(map.transform.zoom);}
-    );
+    });
 
 
   });
@@ -89,7 +92,6 @@ function toggleBubble(e) {
   map.featuresAt(e.point, {"radius":10}, function(err, output) {
         if (err) throw err;
         var latlon=map.unproject(e.point);
-        //var center= map.project(map.getCenter());
         $('.expand').classed({'expand':false});
 
         //take only the id, filter out the border layers and repeats
@@ -247,13 +249,14 @@ function showEditView(d, i, latlon) {
       .attr('layer', function(d, i){return selectedGroup.LayerMapping[MappingScheme[i]]});
 
     //Populate fields with prop values as they currently stand
-    getValues('group');
+    getValues('.editing .inputarea');
   }
 }
 
 // Master value editor: updates and applies new style on every keystroke, and converts prop modes accordingly
 
 function setValue(layer, type, prop, value, convert, instant){
+  clearTimeout(recordChange);
   var layerindex = stylesheet.layers.map(function(e) { return e.id; }).indexOf(layer);
   var path = stylesheet['layers'][layerindex][type][prop];
   var mapObject = map.style.layermap[layer][type][prop];
@@ -286,6 +289,7 @@ function setValue(layer, type, prop, value, convert, instant){
             //if it's currently global, set up new array
             else {
                 var newArray= {"stops": value};
+                console.log(newArray);
                 set(newArray);
             }
             break;
@@ -343,6 +347,12 @@ function setValue(layer, type, prop, value, convert, instant){
             };
             break;
         }
+
+  recordChange=setTimeout(function(){
+    current.history.push([layer, type, prop, path, value]); //old value is path, new value is value
+    fb.set(stylesheet);
+  },300);
+
     //Apply paint changes
     map.style.cascade(instant);
 
@@ -357,15 +367,15 @@ function setValue(layer, type, prop, value, convert, instant){
 
 
 
-function getValues(group) {
+function getValues(selector) {
   
-    $('.editing .inputarea').each(function(){
+    $(selector).each(function(){
         var inputarea = d3.select(this);
         var layer = inputarea.attr('layer');
         var type = inputarea.attr('type');
         var prop = inputarea.attr('prop');
         var value = map.style.layermap[layer][type][prop];
-        console.log(value);
+
         //remove elements from previous inputs
         inputarea.selectAll('.slider, .input, .colorsample, .colordrawer, select').remove();
 
@@ -423,7 +433,6 @@ function getValues(group) {
           }
             else {
               inputarea
-                .attr('mode','global')
                 .on('mousewheel',function(e){
                     event.preventDefault();
 
@@ -465,7 +474,6 @@ function getValues(group) {
                 .text(value)
                 .on('keyup', function(){
                   var newVal = d3.select(this)[0][0].innerHTML;
-                  console.log(newVal);
                   setValue(layer, type, prop, newVal, null);
                 });
 
@@ -475,9 +483,9 @@ function getValues(group) {
                 .classed('global', false)
                 .classed('anchor', true)
                 .on('click', function() {
-                  setValue(layer, type, prop, [ [current.zoom, map.style.layermap[layer][type][prop]] ], 'anchor', null);
-                  getValues('group');
-                  d3.select(this).trigger('mouseout').trigger('mouseover');
+                  setValue(layer, type, prop, [ [Math.round(map.getZoom()), map.style.layermap[layer][type][prop]] ], 'anchor', null);
+                  getValues('.editing .inputarea');
+                  d3.select(this).remove();
                 });
 
               //specific to the color UI: nonwheelable, and append the color picker (inspired by http://codepen.io/Zaku/details/fyLKw)
@@ -601,8 +609,8 @@ function getValues(group) {
             .classed('anchor', false)
             .on('click', function(){
               setValue(layer, type, prop, 1, 'global', null);
-              getValues('group');
-              d3.select(this).trigger('mouseout').trigger('mouseover');
+              getValues('.editing .inputarea');
+              //d3.select(this).trigger('mouseout').trigger('mouseover');
             });
 
           //set up the basic slider and needle
@@ -710,7 +718,7 @@ function updateSliderStop(slider, data, layer, type, prop){
       //mousewheeling to increment value
       .on('mousewheel',function(d){
         event.preventDefault();
-        console.log(event.wheelDeltaY);
+        event.stopPropagation();
 
         var curElem=d3.select(this);
         var input = curElem.select('.input')[0][0];
@@ -739,7 +747,6 @@ function updateSliderStop(slider, data, layer, type, prop){
         var val = curVal;
 
         val=[zoom, parseFloat(val)];
-
         setValue(layer, type, prop, val, null, {transition:!1});
         updateSliderStop(slider, data, layer, type, prop)})
 
