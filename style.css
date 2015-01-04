@@ -11,13 +11,18 @@ body { margin:0;
 width: 10px;
 }
 
+.history {
+  overflow:scroll;
+}
 
+.step {
+  border-bottom: 1px solid #ddd
+}
 /* Direct select stuff */
 
 .direct-select {
   position:absolute;
   pointer-events:none;
-  visibility:hidde;
 }
 
 .direct-select.visible {
@@ -357,7 +362,6 @@ h5 {
   white-space: nowrap;
   vertical-align: middle;
 }
-
 
 .input {
   display:inline;

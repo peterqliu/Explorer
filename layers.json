@@ -123,7 +123,7 @@
   "railroad": {
     "defaultVisibility": true,
     "Category": "Roads",
-    "LayerMapping":["rail", "railroad_hashes"]
+    "LayerMapping":["railroad", "railroad_hashes"]
   },
   "elevated_railroad": {
     "defaultVisibility": true,

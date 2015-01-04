@@ -525,7 +525,7 @@
     }
   },
   {
-    "id": "rail_hashes",
+    "id": "railroad_hashes",
     "ref": "railroad",
     "paint": {
       "line-color": "#aaa",

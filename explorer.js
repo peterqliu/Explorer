@@ -5,6 +5,14 @@
   var recordChange;
   var fb = new Firebase("https://explorer.firebaseio.com");
 
+  //anonymouse login
+  fb.authAnonymously(function(error, authData) {
+    if (error) {
+      console.log("Login Failed!", error);
+    } else {
+      console.log("Authenticated successfully with payload:", authData);
+    }
+  });
 function $(x) {
   return d3.selectAll(x);
 }
@@ -349,7 +357,23 @@ function setValue(layer, type, prop, value, convert, instant){
         }
 
   recordChange=setTimeout(function(){
-    current.history.push([layer, type, prop, path, value]); //old value is path, new value is value
+    //record history only if we're not traversing the history with undo/redo
+    if(convert !='undoredo'){
+      current.history.splice(0, 0, [layer, type, prop, path, value]); //old value is path, new value is value
+
+      d3.select('.history')
+      .selectAll('.step')
+      .data(current.history)
+      .enter()
+      .append('div')
+      .attr('class','step pad1')
+      .text('set '+prop+' of '+formatText(layer)+' to '+value)
+      .on('click',function(d){
+        alert(d);
+        setValue(d[0], d[1], d[2], value, convert, instant, undoredo)
+      });
+
+    }
     fb.set(stylesheet);
   },300);
 
@@ -435,35 +459,30 @@ function getValues(selector) {
               inputarea
                 .on('mousewheel',function(e){
                     event.preventDefault();
-
                     var curElem=d3.select(this);
+                    var layer = curElem.attr('layer');
+                    var type = curElem.attr('type');
+                    var prop = curElem.attr('prop');
                     var input = curElem.select('.input')[0][0];
                     var zoom = parseInt(curElem.attr('zoom'));
-                    var curVal = parseFloat(input.innerHTML);
-                    var delta = event.wheelDeltaY;
+                    var curVal = parseFloat(map.style.layermap[layer][type][prop]);
+                    var wheelDelta = event.wheelDeltaY;
                     var min=0;
                     var max=99;
                     var increment;
-
+                    var delta;
                     if(curElem.attr('prop').indexOf('opacity')==-1)
                       {increment= 0.02}
                     else {increment= 0.02; max=1};
 
+                    delta=wheelDelta*increment*0.01;
 
+                    var newVal=(curVal-delta).toFixed(4);
 
-                    var newVal=curVal-delta*(increment*0.05);
                     if (newVal<=max && newVal>=min) {
-                      curVal=newVal;
+                      setValue(layer, type, prop, newVal, null, {transition:!1});
+                      input.innerHTML = parseFloat(newVal).toFixed(2);
                     }
-                   input.innerHTML = parseFloat(curVal).toFixed(2);
-                    var layer = curElem.attr('layer');
-                    var type = curElem.attr('type');
-                    var prop = curElem.attr('prop');
-                    var val = newVal;
-
-                    if(zoom>=0){
-                      val=[zoom, parseFloat(val)]};
-                    setValue(layer, type, prop, val, null, {transition:!1});
                 })
                 .selectAll('.input')
                 .data([1])
@@ -714,41 +733,36 @@ function updateSliderStop(slider, data, layer, type, prop){
           };
         }
       })
-
-      //mousewheeling to increment value
       .on('mousewheel',function(d){
-        event.preventDefault();
-        event.stopPropagation();
+          event.preventDefault();
+          var curElem=d3.select(this);
+          var layer = curElem.attr('layer');
+          var type = curElem.attr('type');
+          var prop = curElem.attr('prop');
+          var input = curElem.select('.input')[0][0];
+          var zoom = d[0];
+          var curVal = parseFloat(d[1]);
+          var wheelDelta = event.wheelDeltaY;
+          var min=0;
+          var max=99;
+          var increment;
+          var delta;
+          if(curElem.attr('prop').indexOf('opacity')==-1)
+            {increment= 0.02}
+          else {increment= 0.02; max=1};
 
-        var curElem=d3.select(this);
-        var input = curElem.select('.input')[0][0];
-        var zoom = d[0];
-        var curVal = parseFloat(d[1]);
-        var delta = event.wheelDeltaY;
-        var min=0;
-        var max=99;
-        var increment;
+          delta=wheelDelta*increment*0.01;
 
-        if(curElem.attr('prop').indexOf('opacity')==-1)
-          {increment= 0.02}
-        else {increment= 0.02; max=1};
+          var newVal=(curVal-delta).toFixed(4);
+
+          if (newVal<=max && newVal>=min) {
+            setValue(layer, type, prop, [zoom, newVal], null, {transition:!1});
+            input.innerHTML = parseFloat(newVal).toFixed(2);
+          }
+      })
 
 
 
-        var newVal=curVal-delta*(increment*0.05);
-        if (newVal<=max && newVal>=min) {
-          curVal=newVal;
-        }
-        
-        input.innerHTML = parseFloat(curVal).toFixed(2);
-        var layer = curElem.attr('layer');
-        var type = curElem.attr('type');
-        var prop = curElem.attr('prop');
-        var val = curVal;
-
-        val=[zoom, parseFloat(val)];
-        setValue(layer, type, prop, val, null, {transition:!1});
-        updateSliderStop(slider, data, layer, type, prop)})
 
       //draw stop bubble
         .append('div')
