@@ -367,7 +367,7 @@ function setValue(layer, type, prop, value, convert, instant){
       .enter()
       .append('div')
       .attr('class','step pad1')
-      .text('set '+prop+' of '+formatText(layer)+' to '+value)
+      .text('Undo '+prop+' ('+formatText(layer)+')')
       .on('click',function(d){
         alert(d);
         setValue(d[0], d[1], d[2], value, convert, instant, undoredo)
@@ -758,6 +758,7 @@ function updateSliderStop(slider, data, layer, type, prop){
           if (newVal<=max && newVal>=min) {
             setValue(layer, type, prop, [zoom, newVal], null, {transition:!1});
             input.innerHTML = parseFloat(newVal).toFixed(2);
+            updateSliderStop(slider, data, layer, type, prop)
           }
       })
 
