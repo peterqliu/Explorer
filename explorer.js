@@ -199,7 +199,6 @@ function activateLayer(layer){
 };
 
 function deactivateLayer(layer){
-  console.log(layer);
   //replace with original style that we stashed
   var mapStyle = map.style.layermap[layer].paint;
 
@@ -365,7 +364,7 @@ function setValue(layer, type, prop, value, convert, instant){
       .selectAll('.step')
       .data(current.history)
       .enter()
-      .append('div')
+      .insert('div','div')
       .attr('class','step pad1')
       .text('Undo '+prop+' ('+formatText(layer)+')')
       .on('click',function(d){
@@ -490,7 +489,7 @@ function getValues(selector) {
                 .append('div')
                 .attr('class', 'text-right input')
                 .attr('contenteditable','true')
-                .text(value)
+                .text(function(){if (!isNaN(value)){return parseFloat(value).toFixed(2)} else {return value}})
                 .on('keyup', function(){
                   var newVal = d3.select(this)[0][0].innerHTML;
                   setValue(layer, type, prop, newVal, null);
