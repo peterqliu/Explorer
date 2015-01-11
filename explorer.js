@@ -268,7 +268,7 @@ function setValue(layer, type, prop, value, convert, instant){
   var path = stylesheet['layers'][layerindex][type][prop];
   var mapObject = map.style.layermap[layer][type][prop];
 
-  function set(value){
+  function set(value){console.log(value);
     stylesheet['layers'][layerindex][type][prop] = value;
     map.style.layermap[layer][type][prop] = value
   };
@@ -296,7 +296,6 @@ function setValue(layer, type, prop, value, convert, instant){
             //if it's currently global, set up new array
             else {
                 var newArray= {"stops": value};
-                console.log(newArray);
                 set(newArray);
             }
             break;
@@ -308,6 +307,7 @@ function setValue(layer, type, prop, value, convert, instant){
             if (typeof path === 'object' && path['stops'].length > 1) {
               var index = path['stops'].map(function(e){return e[0]}).indexOf(parseFloat(value[0]));
               mapObject['stops'].splice(index, 1);
+
               //console.log('we just removed an anchor. the new value is: '+JSON.stringify(path));
             }
 
@@ -339,6 +339,10 @@ function setValue(layer, type, prop, value, convert, instant){
             }
             break;
 
+          case 'history':
+            console.log('sdfsdf');
+            set(value);
+            break;
           case null:
 
             //Edit existing anchor
@@ -357,8 +361,8 @@ function setValue(layer, type, prop, value, convert, instant){
 
   recordChange=setTimeout(function(){
     //record history only if we're not traversing the history with undo/redo
-    if(convert !='undoredo'){
-      current.history.splice(0, 0, [layer, type, prop, path, value]); //old value is path, new value is value
+    if(convert !='history'){
+      current.history.push([layer, type, prop, path, value]); //old value is path, new value is value
 
       d3.select('.history')
       .selectAll('.step')
@@ -368,13 +372,12 @@ function setValue(layer, type, prop, value, convert, instant){
       .attr('class','step pad1')
       .text('Undo '+prop+' ('+formatText(layer)+')')
       .on('click',function(d){
-        alert(d);
-        setValue(d[0], d[1], d[2], value, convert, instant, undoredo)
+        //alert(d);
+        setValue(d[0], d[1], d[2], d[3], 'history', instant)
       });
-
     }
     fb.set(stylesheet);
-  },300);
+  },500);
 
     //Apply paint changes
     map.style.cascade(instant);
@@ -391,13 +394,13 @@ function setValue(layer, type, prop, value, convert, instant){
 
 
 function getValues(selector) {
-  
     $(selector).each(function(){
         var inputarea = d3.select(this);
         var layer = inputarea.attr('layer');
         var type = inputarea.attr('type');
         var prop = inputarea.attr('prop');
         var value = map.style.layermap[layer][type][prop];
+    console.log(value);
 
         //remove elements from previous inputs
         inputarea.selectAll('.slider, .input, .colorsample, .colordrawer, select').remove();
@@ -503,7 +506,6 @@ function getValues(selector) {
                 .on('click', function() {
                   setValue(layer, type, prop, [ [Math.round(map.getZoom()), map.style.layermap[layer][type][prop]] ], 'anchor', null);
                   getValues('.editing .inputarea');
-                  d3.select(this).remove();
                 });
 
               //specific to the color UI: nonwheelable, and append the color picker (inspired by http://codepen.io/Zaku/details/fyLKw)
@@ -835,6 +837,12 @@ function updateSliderStop(slider, data, layer, type, prop){
 }
 
 
-
+for (var object in stylesheet.layers) {
+  for (var property in stylesheet.layers[object]['paint']) {
+    if (stylesheet.layers[object]['paint'][property]==1) {
+      console.log(stylesheet.layers[object]['id']+"'s "+property)
+    }
+  }
+}
 
 
