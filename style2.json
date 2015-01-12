@@ -1,5 +1,8 @@
 {
   "version": 6,
+  "constants":{
+    "@opacity-1":1
+    },
   "sources": {
     "mapbox": {
       "type": "vector",
@@ -213,7 +216,7 @@
       "line-width": {
         "stops": [ [2, 0.5], [15,3]]
       },      
-      "line-opacity":1,
+      "line-opacity":"@opacity-1",
       "line-blur": 0
     }
   },
@@ -231,7 +234,7 @@
       "line-width": {
         "stops": [ [3, 1], [16,5]]
       },
-      "line-opacity":1,
+      "line-opacity":"@opacity-1",
       "line-blur": 0
     }
   },

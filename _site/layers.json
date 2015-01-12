@@ -57,7 +57,7 @@
   "country_border": {
     "defaultVisibility": true,
     "Category": "Lines",
-    "LayerMapping":[13]
+    "LayerMapping":["country_border"]
   },
   "province_border": {
     "defaultVisibility": true,

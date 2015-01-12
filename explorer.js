@@ -312,25 +312,31 @@ function showEditView(d, i, latlon) {
 
 // Master value editor: updates and applies new style on every keystroke, and converts prop modes accordingly
 
-function setValue(layer, type, prop, value, convert, instant) {
+function setValue(layer, type, prop, value, convert, instant, constant) {
+  console.log(constant);
   clearTimeout(recordChange);
   var layerindex = stylesheet.layers.map(function(e) {
     return e.id;
   }).indexOf(layer);
   var path = stylesheet['layers'][layerindex][type][prop];
+  if (constant){path = stylesheet.constants[constant]};
   var mapObject = map.style.layermap[layer][type][prop];
 
   function set(value) {
-    console.log(value);
+    if (constant){
+      stylesheet.constants[constant]=value;
+      map.options.style.constants[constant]=value
+    } else {
     stylesheet['layers'][layerindex][type][prop] = value;
     map.style.layermap[layer][type][prop] = value
+  }
   };
 
   switch (convert) {
 
     case 'global':
       if (typeof path === 'object') {
-        set(value)
+        path = value;
       };
       //console.log('we just changed a value to global. the new value is: '+JSON.stringify(path));
       break;
@@ -421,7 +427,7 @@ function setValue(layer, type, prop, value, convert, instant) {
         console.log('we just changed an anchor value. Overall, the new value is: ' + JSON.stringify(path));
       } else {
         set(value);
-        //console.log('we just changed a global value. the new value is: '+JSON.stringify(path));
+        console.log('we just changed a global value. the new value is: '+JSON.stringify(path));
 
       };
       break;
@@ -481,9 +487,15 @@ function getValues(selector) {
     var type = inputarea.attr('type');
     var prop = inputarea.attr('prop');
     var value = map.style.layermap[layer][type][prop];
+    var constant = null;
+    if (value[0]=='@'){
+      constant=value;
+      value = stylesheet.constants[value]
+    }
 
+    console.log(value[0]);
     //if it's a fixed value, append an input field and populate it with the value
-    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'null') {
+    if (['string','number', 'null'].indexOf(typeof value)!=-1) {
 
       switch (inputarea.classed('font')) {
         case "font":
@@ -494,7 +506,7 @@ function getValues(selector) {
             .append('select')
             .on('change', function() {
               var newFont = d3.select(this).property('value');
-              setValue(layer, type, prop, newFont, null);
+              setValue(layer, type, prop, newFont, null, null, constant);
             })
             .selectAll('option')
             .data(fonts)
@@ -521,8 +533,8 @@ function getValues(selector) {
             .enter()
             .append('select')
             .on('change', function() {
-              var newFont = d3.select(this).property('value');
-              setValue(layer, type, prop, newFont, null);
+              var newCap = d3.select(this).property('value');
+              setValue(layer, type, prop, newCap, null, null, constant);
             })
             .selectAll('option')
             .data(current.capitalization)
@@ -573,7 +585,7 @@ function getValues(selector) {
               if (newVal <= max && newVal >= min) {
                 setValue(layer, type, prop, newVal, null, {
                   transition: !1
-                });
+                }, constant);
                 input.innerHTML = parseFloat(newVal).toFixed(2);
               }
             })
@@ -592,7 +604,7 @@ function getValues(selector) {
             })
             .on('keyup', function() {
               var newVal = d3.select(this)[0][0].innerHTML;
-              setValue(layer, type, prop, newVal, null);
+              setValue(layer, type, prop, newVal, null, null, constant);
             });
 
           // mode switcher to transitional
