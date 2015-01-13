@@ -620,7 +620,7 @@ h5 {
   opacity:0.8;
 }
 
-.mode {
+.mode, .constant {
   width: 18px;
   height: 18px;
   margin-bottom: -3px;
@@ -635,7 +635,10 @@ h5 {
   background: url('trans.svg') no-repeat;
 }
 
+.constant {
+  background: url('chain.svg') no-repeat;
 
+}
 .symbol a:hover {
   opacity:0.8;
 }
