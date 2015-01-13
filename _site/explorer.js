@@ -459,7 +459,7 @@ function setValue(layer, type, prop, value, convert, instant, constant) {
   if (type == 'layout') {
     map.setStyle(stylesheet)
   }
-  
+
 };
 
 
@@ -502,9 +502,9 @@ function getValues(selector) {
 
     //if it's a fixed value, append an input field and populate it with the value
     if (['string','number', 'null'].indexOf(typeof value)!=-1) {
-
-      switch (inputarea.classed('font')) {
-        case "font":
+      console.log(inputarea.classed('font')+' '+inputarea.classed('capping'));
+      switch (inputarea.classed('font')+' '+inputarea.classed('capping')) {
+        case "true false":
           inputarea
             .selectAll('select')
             .data([1])
@@ -532,7 +532,7 @@ function getValues(selector) {
           break;
 
         //line-cap inputs
-        case "capping":
+        case "false true":
           inputarea
             .selectAll('select')
             .data([1])
@@ -573,7 +573,6 @@ function getValues(selector) {
               var max = 99;
               var increment;
               var delta;
-                console.log(curVal);
 
               if (curVal[0]=='@'){
                 curVal = stylesheet.constants[constant]
@@ -588,7 +587,6 @@ function getValues(selector) {
               delta = wheelDelta * increment * 0.01;
 
               var newVal = (curVal - delta).toFixed(4);
-                console.log();
 
               if (newVal <= max && newVal >= min) {
                 setValue(layer, type, prop, newVal, null, {
@@ -743,7 +741,7 @@ function getValues(selector) {
 
     }
 
-    //if it's a transition value, we gotta build a  slider
+    //if it's a transition value, we gotta build a slider
     if (typeof value === 'object') {
 
       var slider = inputarea.classed('wheelable', false)

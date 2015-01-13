@@ -139,7 +139,7 @@ ul.side {
 
 h2{
     padding:12px 15px;
-    border-bottom:1px solid #ddd;
+    border-bottom:1px solid #aaa;
 }
 
 h5 {
@@ -636,7 +636,7 @@ h5 {
 }
 
 .constant {
-  background: url('chain.svg') no-repeat;
+  background: url('anchor.svg') no-repeat;
 
 }
 .symbol a:hover {
