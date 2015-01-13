@@ -335,7 +335,7 @@ function setValue(layer, type, prop, value, convert, instant, constant) {
 
     case 'global':
       if (typeof path === 'object') {
-        path = value;
+        stylesheet['layers'][layerindex][type][prop] = value;
       };
       //console.log('we just changed a value to global. the new value is: '+JSON.stringify(path));
       break;
@@ -459,6 +459,7 @@ function setValue(layer, type, prop, value, convert, instant, constant) {
   if (type == 'layout') {
     map.setStyle(stylesheet)
   }
+  
 };
 
 
@@ -489,10 +490,16 @@ function getValues(selector) {
     var constant = null;
     if (value[0]=='@'){
       constant=value;
-      value = stylesheet.constants[constant]
+      value = stylesheet.constants[constant];
+    for (var object in stylesheet.layers) {
+      for (var property in stylesheet.layers[object]['paint']) {
+        if (stylesheet.layers[object]['paint'][property] == constant) {
+          console.log(stylesheet.layers[object]['id'] + "'s " + property)
+        }
+      }
+    }
     }
 
-    console.log(value[0]);
     //if it's a fixed value, append an input field and populate it with the value
     if (['string','number', 'null'].indexOf(typeof value)!=-1) {
 
@@ -613,7 +620,7 @@ function getValues(selector) {
             .select('.mode')
             .classed('global', false)
             .classed('anchor', true)
-            .on('click', function() {
+            .on('click', function() { 
               setValue(layer, type, prop, [
                 [Math.round(map.getZoom()), map.style.layermap[layer][type][prop]]
               ], 'anchor', null);
@@ -747,6 +754,7 @@ function getValues(selector) {
         .classed('global', true)
         .classed('anchor', false)
         .on('click', function() {
+          console.log('clicked');
           setValue(layer, type, prop, 1, 'global', null);
           getValues('.editing .inputarea');
           //d3.select(this).trigger('mouseout').trigger('mouseover');
@@ -1001,13 +1009,4 @@ function updateSliderStop(slider, data, layer, type, prop) {
   slider.select('.slidersegment').select('path')
     .attr('d', area(output));
 
-}
-
-
-for (var object in stylesheet.layers) {
-  for (var property in stylesheet.layers[object]['paint']) {
-    if (stylesheet.layers[object]['paint'][property] == 1) {
-      console.log(stylesheet.layers[object]['id'] + "'s " + property)
-    }
-  }
 }
