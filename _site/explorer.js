@@ -313,7 +313,6 @@ function showEditView(d, i, latlon) {
 // Master value editor: updates and applies new style on every keystroke, and converts prop modes accordingly
 
 function setValue(layer, type, prop, value, convert, instant, constant) {
-  console.log(constant);
   clearTimeout(recordChange);
   var layerindex = stylesheet.layers.map(function(e) {
     return e.id;
@@ -490,7 +489,7 @@ function getValues(selector) {
     var constant = null;
     if (value[0]=='@'){
       constant=value;
-      value = stylesheet.constants[value]
+      value = stylesheet.constants[constant]
     }
 
     console.log(value[0]);
@@ -560,18 +559,19 @@ function getValues(selector) {
             .on('mousewheel', function(e) {
               event.preventDefault();
               var curElem = d3.select(this);
-              var layer = curElem.attr('layer');
-              var type = curElem.attr('type');
-              var prop = curElem.attr('prop');
               var input = curElem.select('.input')[0][0];
-              var zoom = parseInt(curElem.attr('zoom'));
-              var curVal = parseFloat(map.style.layermap[layer][type][prop]);
+              var curVal = map.style.layermap[layer][type][prop];
               var wheelDelta = event.wheelDeltaY;
               var min = 0;
               var max = 99;
               var increment;
               var delta;
-              if (curElem.attr('prop').indexOf('opacity') == -1) {
+                console.log(curVal);
+
+              if (curVal[0]=='@'){
+                curVal = stylesheet.constants[constant]
+              }
+              if (prop.indexOf('opacity') == -1) {
                 increment = 0.02
               } else {
                 increment = 0.02;
@@ -581,6 +581,7 @@ function getValues(selector) {
               delta = wheelDelta * increment * 0.01;
 
               var newVal = (curVal - delta).toFixed(4);
+                console.log();
 
               if (newVal <= max && newVal >= min) {
                 setValue(layer, type, prop, newVal, null, {
