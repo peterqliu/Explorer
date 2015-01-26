@@ -214,8 +214,24 @@ h5 {
   position:relative;
 }
 
+.inputarea:hover .constant.openchain {
+  opacity:0.75;
+}
+
+.chainbox {
+}
+.chain {
+  background:#f8f8f8;
+  cursor:pointer;
+}
+
+.chain:hover {
+  background:white;
+}
+
 .openchain ~ .chaindrawer {
-  max-height:560px;
+  margin-top:10px;
+  max-height:360px;
   border:0px solid #eee;
   pointer-events:auto;
 }

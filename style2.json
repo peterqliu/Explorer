@@ -6,7 +6,7 @@
     "@opacity-3":0.25,
     "@blur-1":0.5,
     "@size-1":0.25,
-    "@width-1":0.5,
+    "@color-1":"#c5bca0",
     "@width-2":0.25
     },
   "sources": {
@@ -306,7 +306,7 @@
       "line-cap": "round"
     },
     "paint": {
-      "line-color":"#c5bca0",
+      "line-color":"@color-1",
       "line-width": {
         "stops": [[8, 0], [14, 1.5], [18, 10]]
       },
@@ -464,7 +464,7 @@
       "line-join": "bevel"
     },
     "paint": {
-      "line-color":"#c5bca0",
+      "line-color":"@color-1",
       "line-width": {
         "stops": [[8, 0], [14, 1.5], [18, 10]]
       },
@@ -725,7 +725,7 @@
       "line-join": "bevel"
     },
     "paint": {
-      "line-color":"#c5bca0",
+      "line-color":"@color-1",
       "line-width": {
         "stops": [[8, 0], [14, 1.5], [18, 10]]
       },

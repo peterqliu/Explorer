@@ -828,30 +828,43 @@ function getValues(selector) {
       .enter()
       .append('div')
       .attr('class', 'chaindrawer')
-      .selectAll('.chain')
-        .data(availableConstants)
-        .enter()
+      .append('h3')
+      .text('Link chain');
+      inputarea.select('.chaindrawer')
         .append('div')
-        .attr('class','chain keyline-top keyline-left keyline-right pad1 small')
-        .text(function(d){return stylesheet.constants[d]})
+        .attr('class','chainbox keyline-all')
+        .selectAll('.chain')
+          .data(availableConstants)
+          .enter()
           .append('div')
-          .attr('class', 'col10  text-left')
-          .text(function(d){
-            //iterate through the entire stylesheet to assemble an array of layers using that constant for something
-            var linkedlayers = [];
-            for (var object in stylesheet.layers) {
-              for (var property in stylesheet.layers[object]['paint']) {
-                if (stylesheet.layers[object]['paint'][property] == d) {
-                  linkedlayers.push(stylesheet.layers[object]['id']);
+          .attr('class','chain keyline-bottom pad1 small text-right clearfix')
+          .on('click',function(d){
+            setValue(layer, type, prop, d, null);
+            getValues('.editing .inputarea');
+          })
+          .text(function(d){return stylesheet.constants[d]})
+            .append('div')
+            .attr('class', 'col10  text-left')
+            .text(function(d){
+              //iterate through the entire stylesheet to assemble an array of layers using that constant for something
+              var linkedlayers = [];
+              for (var object in stylesheet.layers) {
+                for (var property in stylesheet.layers[object]['paint']) {
+                  if (stylesheet.layers[object]['paint'][property] == d) {
+                    linkedlayers.push(stylesheet.layers[object]['id']);
+                  }
                 }
               }
-            }
-            return linkedlayers;
-          });
+              var str='';
+              linkedlayers.forEach(function(layer) {
+                str += formatText(layer)+', ';
+              });
+              return str.substr(0, str.length-2);
+            });
 
     inputarea.select('.chaindrawer')
       .append('a')
-      .text('Start new chain')
+      .text('+ Start new chain')
       .attr('class', 'center')
       .on('click', function(){ 
         // calculate name for next available proptype number
@@ -863,7 +876,8 @@ function getValues(selector) {
         stylesheet.constants[constantName]= value;
 
         // set value to this new constant
-        setValue(layer, type, prop, constantName)
+        setValue(layer, type, prop, null, null, constantName);
+        getValues('.editing .inputarea');
       })
   })
 
