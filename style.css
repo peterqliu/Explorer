@@ -204,7 +204,7 @@ h5 {
   -webkit-transform:scale(1.2);
 }
 
-.colordrawer {
+.colordrawer, .chaindrawer {
   -webkit-transition:max-height 0.1s ease-in;
   max-height:0px;
   overflow:hidden;
@@ -213,7 +213,14 @@ h5 {
   pointer-events:none;
   position:relative;
 }
-.open ~ .colordrawer {
+
+.openchain ~ .chaindrawer {
+  max-height:560px;
+  border:0px solid #eee;
+  pointer-events:auto;
+}
+
+.opencolor ~ .colordrawer {
   max-height:260px;
   border:0px solid #eee;
   pointer-events:auto;
@@ -225,6 +232,8 @@ h5 {
   height:200px;
   cursor:crosshair;
 }
+
+
 .xline {
   height:200px;
   width:10px;
@@ -576,15 +585,6 @@ h5 {
   cursor:-webkit-grabbing;
 }
 
-.dowarrow {
-  position:absolute;
-  border-top: 6px solid #333;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-}
-.downarrow:before {
-
-}
 
 /* Icon orientation */
 
@@ -611,20 +611,25 @@ h5 {
   outline:1px solid blue;
 }
 
-.inputarea:hover .mode {
+.inputarea:hover .mode,
+.inputarea:hover .constant {
   display:inline-block;
   opacity:0.3;
 }
 
-.inputarea:hover .mode:hover {
+.inputarea:hover .mode:hover,
+.inputarea:hover .constant:hover {
   opacity:0.8;
 }
 
 .mode, .constant {
   width: 18px;
   height: 18px;
-  margin-bottom: -3px;
   display:inline;
+  text-align: left;
+  float: left;
+  margin: 15px 0px 0px 3px;
+  opacity:0;
 }
 
 .global {
@@ -636,7 +641,7 @@ h5 {
 }
 
 .constant {
-  background: url('anchor.svg') no-repeat;
+  background: url('chain.svg') no-repeat;
 
 }
 .symbol a:hover {
@@ -646,7 +651,7 @@ h5 {
 
 
 /* Tooltippery */
-
+.constant:hover:before,
 .mode:hover:before,
 .tooltip:hover:before{
   position: absolute;
@@ -665,6 +670,7 @@ h5 {
   white-space: nowrap;
   -webkit-transform:none;
 }
+.constant:hover:after,
 .mode:hover:after {
   position: absolute;
   display:inline-block;
@@ -677,7 +683,7 @@ h5 {
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   top: 5;
-  margin-left:5px;
+  margin-left:3px;
   content:'';
 }
 .global:hover:before {
@@ -688,10 +694,14 @@ h5 {
   content:'Set a transform';
 }
 
+.constant:hover:before {
+  content:'Edit style chain';
+}
+
 .tooltip.colorsample:hover:before {
   content:'Open color picker';
   font-size:10px;
 }
-.open.colorsample:hover:before {
+.opencolor.colorsample:hover:before {
   content:'Close color picker';
 }

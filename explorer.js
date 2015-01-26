@@ -467,7 +467,7 @@ function setValue(layer, type, prop, value, convert, instant, constant) {
 
 function getValues(selector) {
   //remove elements from previous inputs
-  $(selector).selectAll('.slider, .input, .colorsample, .colordrawer, select').remove();
+  $(selector).selectAll('.slider, .input, .colorsample, .colordrawer, select, .chaindrawer').remove();
 
   //set title
   d3.selectAll('h2')
@@ -487,23 +487,26 @@ function getValues(selector) {
     var type = inputarea.attr('type');
     var prop = inputarea.attr('prop');
     var value = map.style.layermap[layer][type][prop];
+
+    //get type of property this is (color, width, opacity, etc)
+    var lasthyphen = prop.lastIndexOf('-');
+    var proptype = prop.substr(lasthyphen+1);
+
     var constant = null;
+    //if value is a constant, go find the value in the constants section
     if (value[0]=='@'){
-      constant=value;
-      value = stylesheet.constants[constant];
-    for (var object in stylesheet.layers) {
-      for (var property in stylesheet.layers[object]['paint']) {
-        if (stylesheet.layers[object]['paint'][property] == constant) {
-          console.log(stylesheet.layers[object]['id'] + "'s " + property)
-        }
-      }
-    }
-    }
+      constant = value;
+      value = stylesheet.constants[constant];   
+    };
+
 
     //if it's a fixed value, append an input field and populate it with the value
     if (['string','number', 'null'].indexOf(typeof value)!=-1) {
-      console.log(inputarea.classed('font')+' '+inputarea.classed('capping'));
+      //console.log(inputarea.classed('font')+' '+inputarea.classed('capping'));
+
       switch (inputarea.classed('font')+' '+inputarea.classed('capping')) {
+
+        //font dropdowns
         case "true false":
           inputarea
             .selectAll('select')
@@ -531,7 +534,7 @@ function getValues(selector) {
             });
           break;
 
-        //line-cap inputs
+        //line-cap dropdowns
         case "false true":
           inputarea
             .selectAll('select')
@@ -633,7 +636,10 @@ function getValues(selector) {
               .insert('div', '.input')
               .attr('class', 'colorsample tooltip fr')
               .attr('style', 'background-color:' + value)
-              .attr('onclick', 'd3.select(this).classed("open", !d3.select(this).classed("open"))');
+              .on('click', function(){
+                d3.select(this)
+                  .classed("opencolor", !d3.select(this).classed("opencolor"))
+              });
 
             inputarea.select('.input')
               .on('keyup', function() {
@@ -697,7 +703,7 @@ function getValues(selector) {
               .on('click', function() {
                 inputarea
                   .select('.colorsample')
-                  .classed('open', false);
+                  .classed('opencolor', false);
                 value = map.style.layermap[layer][type][prop];
               })
               .on('mouseleave', function() {
@@ -736,9 +742,6 @@ function getValues(selector) {
             inputarea.classed('wheelable', true)
           }
         }
-
-
-
     }
 
     //if it's a transition value, we gotta build a slider
@@ -808,7 +811,64 @@ function getValues(selector) {
       //add stops for the first time
       updateSliderStop(slider, value.stops, layer, type, prop);
     }
+
+
+    inputarea.selectAll('.constant')              
+      .on('click', function(){
+        d3.select(this)
+          .classed("openchain", !d3.select(this).classed("openchain"))
+      });
+
+    var availableConstants= Object.getOwnPropertyNames(stylesheet.constants).filter(function(n){return n.indexOf(proptype)!=-1})
+    
+
+    inputarea
+      .selectAll('.chaindrawer')
+      .data([0])
+      .enter()
+      .append('div')
+      .attr('class', 'chaindrawer')
+      .selectAll('.chain')
+        .data(availableConstants)
+        .enter()
+        .append('div')
+        .attr('class','chain keyline-top keyline-left keyline-right pad1 small')
+        .text(function(d){return stylesheet.constants[d]})
+          .append('div')
+          .attr('class', 'col10  text-left')
+          .text(function(d){
+            //iterate through the entire stylesheet to assemble an array of layers using that constant for something
+            var linkedlayers = [];
+            for (var object in stylesheet.layers) {
+              for (var property in stylesheet.layers[object]['paint']) {
+                if (stylesheet.layers[object]['paint'][property] == d) {
+                  linkedlayers.push(stylesheet.layers[object]['id']);
+                }
+              }
+            }
+            return linkedlayers;
+          });
+
+    inputarea.select('.chaindrawer')
+      .append('a')
+      .text('Start new chain')
+      .attr('class', 'center')
+      .on('click', function(){ 
+        // calculate name for next available proptype number
+        var n=1;
+        while (stylesheet.constants['@'+proptype+'-'+n]) n++;
+        var constantName = '@'+proptype+'-'+n;
+
+        // create new constant
+        stylesheet.constants[constantName]= value;
+
+        // set value to this new constant
+        setValue(layer, type, prop, constantName)
+      })
   })
+
+
+
 
 };
 
