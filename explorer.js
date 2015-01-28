@@ -467,7 +467,7 @@ function setValue(layer, type, prop, value, convert, instant, constant) {
 
 function getValues(selector) {
   //remove elements from previous inputs
-  $(selector).selectAll('.slider, .input, .colorsample, .colordrawer, select, .chaindrawer').remove();
+  $(selector).selectAll('.slider, .input, .colorsample, .colordrawer, .chaindrawer, select').remove();
 
   //set title
   d3.selectAll('h2')
@@ -818,69 +818,97 @@ function getValues(selector) {
         d3.select(this)
           .classed("openchain", !d3.select(this).classed("openchain"))
       });
-
-    var availableConstants= Object.getOwnPropertyNames(stylesheet.constants).filter(function(n){return n.indexOf(proptype)!=-1})
-    
-
-    inputarea
-      .selectAll('.chaindrawer')
-      .data([0])
-      .enter()
-      .append('div')
-      .attr('class', 'chaindrawer')
-      .append('h3')
-      .text('Link chain');
-      inputarea.select('.chaindrawer')
-        .append('div')
-        .attr('class','chainbox keyline-all')
-        .selectAll('.chain')
-          .data(availableConstants)
-          .enter()
-          .append('div')
-          .attr('class','chain keyline-bottom pad1 small text-right clearfix')
-          .on('click',function(d){
-            setValue(layer, type, prop, d, null);
-            getValues('.editing .inputarea');
-          })
-          .text(function(d){return stylesheet.constants[d]})
-            .append('div')
-            .attr('class', 'col10  text-left')
-            .text(function(d){
-              //iterate through the entire stylesheet to assemble an array of layers using that constant for something
-              var linkedlayers = [];
-              for (var object in stylesheet.layers) {
-                for (var property in stylesheet.layers[object]['paint']) {
-                  if (stylesheet.layers[object]['paint'][property] == d) {
-                    linkedlayers.push(stylesheet.layers[object]['id']);
-                  }
-                }
-              }
-              var str='';
-              linkedlayers.forEach(function(layer) {
-                str += formatText(layer)+', ';
-              });
-              return str.substr(0, str.length-2);
-            });
-
-    inputarea.select('.chaindrawer')
-      .append('a')
-      .text('+ Start new chain')
-      .attr('class', 'center')
-      .on('click', function(){ 
-        // calculate name for next available proptype number
-        var n=1;
-        while (stylesheet.constants['@'+proptype+'-'+n]) n++;
-        var constantName = '@'+proptype+'-'+n;
-
-        // create new constant
-        stylesheet.constants[constantName]= value;
-
-        // set value to this new constant
-        setValue(layer, type, prop, null, null, constantName);
-        getValues('.editing .inputarea');
+    function updateConstants(){
+      //get list of all constants in this property's type
+      var availableConstants= Object.getOwnPropertyNames(stylesheet.constants).filter(function(n){return n.indexOf(proptype)!=-1})
+      var constantMap = availableConstants.map(function(n){
+        var linkedlayers = [n];
+        for (var object in stylesheet.layers) {
+          for (var property in stylesheet.layers[object]['paint']) {
+            if (stylesheet.layers[object]['paint'][property] == n) {
+              linkedlayers.push(stylesheet.layers[object]['id']);
+            }
+          }
+         }
+        // if the constant isn't being used, delete it
+        if(linkedlayers.length==1){delete stylesheet.constants[n]} 
+        return linkedlayers
       })
-  })
+      .filter(function(x) {
+        return x.length>1;
+      });
+      console.log(constantMap)
 
+      inputarea
+        .selectAll('.chaindrawer')
+        .data([0])
+        .enter()
+          .append('div')
+          .attr('class', 'chaindrawer')
+            .append('h3')
+            .text('Link chain');
+        
+      inputarea
+        .selectAll('.chaindrawer')
+        .selectAll('.chainbox')
+        .data([0])
+        .enter()
+          .append('div')
+          .attr('class','chainbox keyline-all')
+          .selectAll('.chain')
+            .data(constantMap)
+            .enter()
+              .append('div')
+              .attr('class','chain keyline-bottom pad1 small text-right clearfix')
+              .on('click',function(d){
+                console.log(d[0]);
+                setValue(layer, type, prop, d[0], null);
+                getValues('.editing .inputarea');
+              })
+            .text(function(d){ 
+              if(proptype!='color') return parseFloat(stylesheet.constants[d[0]]).toFixed(2); 
+              else return stylesheet.constants[d[0]]
+            })
+              .append('div')
+              .attr('class', 'col10 text-left')
+              .text(function(d){
+                //iterate through the entire stylesheet to assemble an array of layers using that constant for something
+                var str='';
+
+                for(var j=1; j<d.length; j++) {
+                  str += formatText(d[j])+', ';
+                };
+                return str.substr(0, str.length-2);
+              });
+
+      inputarea.select('.chaindrawer')
+        .selectAll('a')
+        .data([0])
+        .enter()
+        .append('a')
+        .text('+ Start new chain')
+        .attr('class', 'center')
+        .on('click', function(){ 
+          // calculate name for next available proptype number
+          var n=1;
+          while (stylesheet.constants['@'+proptype+'-'+n]) n++;
+          var constantName = '@'+proptype+'-'+n;
+
+          // create new constant
+          stylesheet.constants[constantName]= value;
+          console.log('the new constant is '+constantName);
+          // set value to this new constant
+          setValue(layer, type, prop, constantName, null);
+          console.log(map.style.layermap[layer][type][prop])
+
+          getValues('.editing .inputarea');
+
+
+          updateConstants();
+        })
+      }
+      updateConstants();
+    })
 
 
 
