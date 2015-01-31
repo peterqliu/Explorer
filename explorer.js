@@ -903,8 +903,6 @@ function getValues(selector) {
 
           getValues('.editing .inputarea');
 
-
-          updateConstants();
         })
       }
       updateConstants();
